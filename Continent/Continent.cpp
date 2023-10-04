@@ -1,24 +1,21 @@
-#include <iostream>
-#include <string>
-#include "Territory.h"
-#include "Continent.h"
+#include "Map.h"
+#include "MapLoader.h"
 
-using namespace std;
+void testLoadMaps() {
+    // Example code: adapt it for multiple files, handle memory cleanup etc.
+    MapLoader loader("path_to_map_file.map");
+    Map *map = loader.loadMap();
 
+    if(map && map->validate()) {
+        std::cout << "Valid map!" << std::endl;
+    } else {
+        std::cout << "Invalid map!" << std::endl;
+    }
 
-
-Continent::Continent (){ // Default constructor
-    continent_name = "";
+    delete map;  // Clean up memory
 }
 
-
-
-Continent::Continent (const string& name){
-    continent_name = name;
-}
-
-
-int main(){
-
+int main() {
+    testLoadMaps();
     return 0;
 }
