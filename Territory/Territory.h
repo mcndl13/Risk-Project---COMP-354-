@@ -1,39 +1,21 @@
-#pragma once
-#include <string>
+#include <iostream>
 #include <vector>
 
-using namespace std;
-
-class Continent;
-
-
 class Territory {
+public:
+    Territory(const std::string &name);
+    ~Territory();
+
+    Territory(const Territory &t); // copy constructor
+    Territory& operator=(const Territory &t); // assignment operator
+    friend std::ostream& operator<<(std::ostream &os, const Territory &t); // stream insertion operator
+
+    void addAdjacency(Territory *territory);
+    const std::vector<Territory*>& getAdjacencies() const;
 
 private:
-    int id;
-    string territory_name;
-
-    // Reference to the continent it belongs to Continents must also be connected subgraphs, 
-    // where each territory belongs to one and only one continent
-    Continent*  continent; 
-    vector<Territory*> neighbours;
-
-public:
-    Territory(int id, const string& name);
-    
-    // Getters
-    int GetID();
-
-    string GetName();
-
-    Continent* GetContinent();
-
-    const vector<Territory*>& GetNeighbors();
-
-
-    // Set continent
-    void SetContinent(Continent* continent);
-
-    // Add neighbour
-    void AddNeighbour(Territory* neighbour);
+    std::string *name;
+    std::string *owningPlayer;
+    int *numArmies;
+    std::vector<Territory*> adjacencies;
 };
