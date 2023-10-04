@@ -1,9 +1,32 @@
-#include <iostream>
+#include "Map.h"
+
+// Implementations for Map methods and operators go here.
+// Include validation methods, memory management etc.
+
+/*
+
+map rules:
+- each territoy has a colour to represent the play
+- Gray territory is neutral
 
 
-class Map {
-public:
-    Map();
-    // Add methods and properties for map manipulation.
-};
+Playing:
+- Each turn you receive new armies.  Right now, you are receiving five armies per turn.
+- The first step of every turn is deploying your new armies.
 
+
+Format:
+- Map is connected graph
+    - Node = Territory
+
+- Continent is connected subgraphs
+
+continents > territories
+
+
+1. The map must be implemented as a connected graph, where each node represents 
+   a territory.
+
+
+
+*/
