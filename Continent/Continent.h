@@ -1,22 +1,20 @@
-#pragma once
-#include <string>
+#include <iostream>
 #include <vector>
-
-using namespace std;
-
-class Territory; // Forward declaration of Territory class
+#include "Territory.h"
 
 class Continent {
 public:
-    Continent(); // Default Constructor
-    Continent(const string& continent_name);
-    
-    const string& GetName() const;
-    const vector<Territory*>& GetTerritories() const; // Contains all the territories of the continent
+    Continent(const std::string &name);
+    ~Continent();
 
-    void AddTerritory(Territory* territory);
+    Continent(const Continent &c); // copy constructor
+    Continent& operator=(const Continent &c); // assignment operator
+    friend std::ostream& operator<<(std::ostream &os, const Continent &c); // stream insertion operator
+
+    void addTerritory(Territory *territory);
+    const std::vector<Territory*>& getTerritories() const;
 
 private:
-    string continent_name;
-    vector<Territory*> territories;
+    std::string *name;
+    std::vector<Territory*> territories;
 };
