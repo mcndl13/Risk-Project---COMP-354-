@@ -1,21 +1,21 @@
-#include "Map.h"
-#include "MapLoader.h"
+#include <iostream>
+#include <vector>
+#include "Territory.h"
 
-void testLoadMaps() {
-    // Example code: adapt it for multiple files, handle memory cleanup etc.
-    MapLoader loader("path_to_map_file.map");
-    Map *map = loader.loadMap();
+class Continent {
+public:
+    Continent(const std::string &name);
+    ~Continent();
 
-    if(map && map->validate()) {
-        std::cout << "Valid map!" << std::endl;
-    } else {
-        std::cout << "Invalid map!" << std::endl;
-    }
+    Continent(const Continent &c); // copy constructor
+    Continent& operator=(const Continent &c); // assignment operator
+    friend std::ostream& operator<<(std::ostream &os, const Continent &c); // stream insertion operator
 
-    delete map;  // Clean up memory
-}
+    void addTerritory(Territory *territory);
+    const std::vector<Territory*>& getTerritories() const;
 
-int main() {
-    testLoadMaps();
-    return 0;
-}
+private:
+    std::string *name;
+    std::vector<Territory*> territories;
+};
+
