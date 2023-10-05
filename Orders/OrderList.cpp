@@ -20,5 +20,10 @@ void OrderList::move(int srcIndex, int destIndex)
 
 void OrderList::remove(int index)
 {
-
+	if (index >= 0 && index < orders.size()) 
+	{
+		Order* order = orders[index];
+		orders.erase(orders.begin() + index);
+		delete order; // É¾³ı±»ÒÆ³ıµÄ¶©µ¥Ö¸Õë
+	}
 }
