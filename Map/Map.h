@@ -17,6 +17,8 @@ public:
     void addTerritory(Territory *territory);
     void addContinent(Continent *continent);
     bool isContinentConnected(Continent *continent) const;  // method to check connectivity of the continents to ensure the continents are connected subgraphs
+    bool isConnectedGraph() const;  // new method for verification if the map is a connected graph
+    bool isTerritoryInOneContinent() const;  // new method for verification if territory or country belongs to one and one continent
     const std::vector<Continent*>& getContinents() const;  // new method to get continents
 
 private:
