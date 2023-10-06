@@ -26,6 +26,11 @@ void Map::dfs(Territory* territory, std::unordered_set<Territory*>& visited) con
     }
 }
 
+const std::vector<Continent*>& Map::getContinents() const {  // Implementation of getContinents method
+    return continents;
+}
+
+
 
 /*
 
