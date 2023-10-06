@@ -62,6 +62,29 @@ bool Map::isContinentConnected(Continent *continent) const {
     return true;
 }
 
+bool Map::isConnectedGraph() const {
+    if (territories.empty()) return false;
+
+    std::unordered_set<Territory*> visited;
+    dfs(territories[0], nullptr, visited);  // Passing null for continent to traverse all territories
+
+    return visited.size() == territories.size();  // All territories should be visited
+}
+
+bool Map::isTerritoryInOneContinent() const {
+    for (const auto& territory : territories) {
+        int continentCount = 0;
+        for (const auto& continent : continents) {
+            if (std::find(continent->getTerritories().begin(), continent->getTerritories().end(), territory) != continent->getTerritories().end()) {
+                continentCount++;
+                if (continentCount > 1) return false;  // Territory found in more than one continent
+            }
+        }
+    }
+
+    return true;  // All territories belong to exactly one continent
+}
+
 void Map::dfs(Territory* territory, Continent* continent, std::unordered_set<Territory*>& visited) const {
     if (std::find(continent->getTerritories().begin(), continent->getTerritories().end(), territory) == continent->getTerritories().end()) {
         return;  // Territory is not part of the specified continent, return without further traversal
