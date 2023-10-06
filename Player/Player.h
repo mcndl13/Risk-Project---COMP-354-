@@ -23,6 +23,7 @@ class Player {
     std::string playername;
     std::vector<Territory*> owned_territories;
     std::vector<Territory*> enemy_territories;
-    std::vector<OrderList*> order; 
+    std::vector<OrderList*> order;
+    std::vector<Card*> cards; 
  
 };
