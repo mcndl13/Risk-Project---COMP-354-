@@ -3,6 +3,8 @@
 #include <sstream>
 #include <map>
 
+// Implementations for MapLoader methods. Handle file reading and parsing here.
+
 MapLoader::MapLoader(const std::string &filePath) {
     this->filePath = new std::string(filePath);
 }
@@ -72,7 +74,16 @@ Map* MapLoader::loadMap() {
     }
 
     file.close();
+    
+    // Validate the connectivity of continents
+    for (auto continent : map->getContinents()) {
+        if (!map->isContinentConnected(continent)) {
+            std::cerr << "Continent " << *(continent->getName()) << " is not a connected subgraph." << std::endl;
+            delete map;  // free memory
+            return nullptr;  // return null if any continent is not connected
+        }
+    }
     return map;
 }
 
-// Implementations for MapLoader methods. Handle file reading and parsing here.
+
