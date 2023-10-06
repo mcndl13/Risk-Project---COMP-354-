@@ -16,10 +16,11 @@ public:
     bool validate() const;
     void addTerritory(Territory *territory);
     void addContinent(Continent *continent);
-    bool isContinentConnected(Continent *continent) const;  // new method to check connectivity of the continents to ensure the continents are connected subgraphs
+    bool isContinentConnected(Continent *continent) const;  // method to check connectivity of the continents to ensure the continents are connected subgraphs
+    const std::vector<Continent*>& getContinents() const;  // new method to get continents
 
 private:
-    void dfs(Territory* territory, std::unordered_set<Territory*>& visited) const;  // new method
+    void dfs(Territory* territory, std::unordered_set<Territory*>& visited) const;  // method for DFS traversal
     std::vector<Territory*> territories;
     std::vector<Continent*> continents;
 };
