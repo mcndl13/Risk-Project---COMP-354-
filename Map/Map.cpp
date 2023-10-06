@@ -6,10 +6,18 @@ Map::Map() {
     // Initialization of members can be done here later PSA: DO THIS LATER
 }
 
-Map::~Map() {
+
+Map::~Map() { 
     // Destructor implementation
     // Memory cleanup can be done here PSA: DO THIS LATER
+    for (auto territory : territories) {
+        delete territory;
+    }
+    for (auto continent : continents) {
+        delete continent;
+    }
 }
+
 
 Map::Map(const Map &m) {
     // Copy constructor implementation
