@@ -2,12 +2,12 @@
 #include <iostream>
 #include <vector>
 #include "Territory.h"
-#include "OrderList"
+#include "OrderList.h"
 
 
 class Player {
 
-        Player(const int playernb);
+        Player(const std::string& playername);
         ~Player();
         
         Player(const Player &p); // copy constructor
@@ -20,9 +20,9 @@ class Player {
 
 
  private:
+    std::string playername;
     std::vector<Territory*> owned_territories;
     std::vector<Territory*> enemy_territories;
     std::vector<OrderList*> order; 
  
 };
-
