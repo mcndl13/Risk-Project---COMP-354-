@@ -132,6 +132,14 @@ void Map::dfs(Territory* territory, Continent* continent, std::unordered_set<Ter
     }
 }
 
+void Map::addTerritory(Territory *territory) {
+    territories.push_back(territory);
+}
+
+void Map::addContinent(Continent *continent) {
+    continents.push_back(continent);
+}
+
 const std::vector<Continent*>& Map::getContinents() const {  // Implementation of getContinents method
     return continents;
 }
