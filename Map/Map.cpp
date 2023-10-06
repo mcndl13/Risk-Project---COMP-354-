@@ -111,9 +111,10 @@ bool Map::validate() const {
 }
 
 void Map::dfs(Territory* territory, Continent* continent, std::unordered_set<Territory*>& visited) const {
-    if (std::find(continent->getTerritories().begin(), continent->getTerritories().end(), territory) == continent->getTerritories().end()) {
-        return;  // Territory is not part of the specified continent, return without further traversal
-    }
+    if (continent && std::find(continent->getTerritories().begin(), continent->getTerritories().end(), territory) == continent->getTerritories().end()) {
+    return;  // Territory is not part of the specified continent, return without further traversal
+}
+
 
     visited.insert(territory);
     for (auto adjacent : territory->getAdjacencies()) {
