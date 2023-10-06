@@ -28,3 +28,11 @@ Territory& Territory::operator=(const Territory &t) {
     adjacencies = t.adjacencies;
     return *this;
 }
+
+void Territory::addAdjacency(Territory *territory) {
+    adjacencies.push_back(territory);
+}
+
+const std::vector<Territory*>& Territory::getAdjacencies() const {
+    return adjacencies;
+}
