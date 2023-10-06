@@ -21,3 +21,15 @@ Continent& Continent::operator=(const Continent &c) {
     territories = c.territories;
     return *this;
 }
+
+void Continent::addTerritory(Territory *territory) {
+    territories.push_back(territory);
+}
+
+const std::vector<Territory*>& Continent::getTerritories() const {
+    return territories;
+}
+
+const std::string& Continent::getName() const {
+    return *name;
+}
