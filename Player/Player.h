@@ -21,7 +21,7 @@ class Player {
 
  private:
     std::vector<Territory*> owned_territories;
-    std::vector<Territory*> ennemy_territories;
+    std::vector<Territory*> enemy_territories;
     std::vector<OrderList*> order; 
  
 };
