@@ -1,41 +1,27 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "Territory.h"
 
-using namespace std;
 
-class Territory;
+class Player {
 
-class Player: public Continent; public Territory{
-
-        Player();
+        Player(const int playernb);
         ~Player();
         
         Player(const Player &p); // copy constructor
         Player& operator=(const Player &p); // assignment operator
         friend std::ostream& operator<<(std::ostream &os, const Player &p); // stream insertion operator
-
-
-        // These 3 function should be in the cpp file
-        Continent toDefend(){
-            return owned_territories;
-        }
-
-        toAttack(continent){
-            return continent;
-        }
-
-        issueOrder(order){
-            return order;
-        }
+        
+        void toDefend();
+        void toAttack();
+        void issueOrder(Order* order);
 
 
  private:
-     vector<Territory*> owned_territories;
-        int player_ID;
-    Continent continent;
-    Order order;   
+    std::vector<Territory*> owned_territories;
+    std::vector<Territory*> ennemy_territories;
+    std::vector<Order*> order; 
  
 };
-
 
