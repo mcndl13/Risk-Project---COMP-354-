@@ -4,9 +4,9 @@
 
 using namespace std;
 
-int main() {
+void testCards() {
 
-	Card* card = new Card();		
+    Card* card = new Card();		
 	Player* player = new Player();	
 
 
@@ -95,7 +95,11 @@ int main() {
 	copyDeck = NULL;
 	copyHand = NULL;
 
+}
 
+int main() {
+
+	testCards();
 
 	return 0;
 }
