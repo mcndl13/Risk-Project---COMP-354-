@@ -16,7 +16,7 @@ void testLoadMaps(const std::vector<std::string>& mapFiles) {
                 std::cout << "Valid map loaded from: " << mapFile << std::endl;
 
                 // Demonstrating verifications:
-                // Assuming there are methods in Map class named `isConnectedGraph` and `isTerritoryInOneContinent`
+                
                 if (map->isConnectedGraph()) {
                     std::cout << "The map is a connected graph." << std::endl;
                 } else {
@@ -34,7 +34,7 @@ void testLoadMaps(const std::vector<std::string>& mapFiles) {
                     std::cout << "All continents are connected subgraphs." << std::endl;
                 }
 
-                // Assuming `isTerritoryInOneContinent` checks if each territory belongs to one and only one continent
+                
                 if (map->isTerritoryInOneContinent()) {
                     std::cout << "Each territory belongs to one and only one continent." << std::endl;
                 } else {
