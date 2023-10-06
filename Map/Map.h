@@ -13,7 +13,7 @@ public:
     Map& operator=(const Map &m); // assignment operator
     friend std::ostream& operator<<(std::ostream &os, const Map &m); // stream insertion operator
 
-    bool validate() const;
+    
     bool validate() const;  // declaration for the validate method
     void addTerritory(Territory *territory);
     void addContinent(Continent *continent);
