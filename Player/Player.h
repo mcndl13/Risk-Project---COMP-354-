@@ -14,7 +14,9 @@ class Player: public Continent; public Territory{
         Player(const Player &p); // copy constructor
         Player& operator=(const Player &p); // assignment operator
         friend std::ostream& operator<<(std::ostream &os, const Player &p); // stream insertion operator
-        
+
+
+        // These 3 function should be in the cpp file
         Continent toDefend(){
             return owned_territories;
         }
