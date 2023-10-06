@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Territory.h"
+#include "OrderList"
 
 
 class Player {
@@ -21,7 +22,7 @@ class Player {
  private:
     std::vector<Territory*> owned_territories;
     std::vector<Territory*> ennemy_territories;
-    std::vector<Order*> order; 
+    std::vector<OrderList*> order; 
  
 };
 
