@@ -20,7 +20,8 @@ public:
     const std::vector<Continent*>& getContinents() const;  // new method to get continents
 
 private:
-    void dfs(Territory* territory, std::unordered_set<Territory*>& visited) const;  // method for DFS traversal
+
+    void dfs(Territory* territory, Continent* continent, std::unordered_set<Territory*>& visited) const;  // method for DFS traversal
     std::vector<Territory*> territories;
     std::vector<Continent*> continents;
 };
