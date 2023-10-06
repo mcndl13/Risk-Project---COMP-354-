@@ -15,8 +15,8 @@ MapLoader::~MapLoader() {
 
 Map* MapLoader::loadMap() {
     std::ifstream file(*filePath);
-    if (!file.is_open()) {
-        std::cerr << "Could not open file: " << *filePath << std::endl;
+   if (!file) {
+        std::cerr << "Error: could not open file: " << *filePath << std::endl;
         return nullptr;
     }
 
