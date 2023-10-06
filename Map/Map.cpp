@@ -85,6 +85,31 @@ bool Map::isTerritoryInOneContinent() const {
     return true;  // All territories belong to exactly one continent
 }
 
+bool Map::validate() const {
+    // Check if the map is a connected graph
+    if (!isConnectedGraph()) {
+        std::cout << "The map is not a connected graph." << std::endl;
+        return false;
+    }
+
+    // Check if each continent is a connected subgraph
+    for (const auto& continent : continents) {
+        if (!isContinentConnected(continent)) {
+            std::cout << "Continent " << continent->getName() << " is not a connected subgraph." << std::endl;
+            return false;
+        }
+    }
+
+    // Check if each territory belongs to one and only one continent
+    if (!isTerritoryInOneContinent()) {
+        std::cout << "Some territories belong to more than one continent." << std::endl;
+        return false;
+    }
+
+    // All checks passed
+    return true;
+}
+
 void Map::dfs(Territory* territory, Continent* continent, std::unordered_set<Territory*>& visited) const {
     if (std::find(continent->getTerritories().begin(), continent->getTerritories().end(), territory) == continent->getTerritories().end()) {
         return;  // Territory is not part of the specified continent, return without further traversal
