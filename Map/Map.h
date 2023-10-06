@@ -14,6 +14,7 @@ public:
     friend std::ostream& operator<<(std::ostream &os, const Map &m); // stream insertion operator
 
     bool validate() const;
+    bool validate() const;  // declaration for the validate method
     void addTerritory(Territory *territory);
     void addContinent(Continent *continent);
     bool isContinentConnected(Continent *continent) const;  // method to check connectivity of the continents to ensure the continents are connected subgraphs
