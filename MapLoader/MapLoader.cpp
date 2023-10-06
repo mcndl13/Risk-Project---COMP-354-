@@ -49,7 +49,15 @@ Map* MapLoader::loadMap() {
                 Territory* territory = new Territory(name);
                 map->addTerritory(territory);
                 territoryMap[name] = territory;  // Store territory for later adjacency setup
-                
+
+                // Check if territory has already been assigned to a continent
+                if (assignedTerritories.find(name) != assignedTerritories.end()) {
+                    std::cerr << "Territory " << name << " is assigned to more than one continent." << std::endl;
+                    delete map;  // free memory
+                    return nullptr;  // return null if a territory is assigned to more than one continent
+                }
+                assignedTerritories.insert(name);  // Mark territory as assigned
+
                 // Assuming continent names are unique and have been read already
                 for (auto continent : map->getContinents()) {
                     if (*(continent->getName()) == continent_name) {
