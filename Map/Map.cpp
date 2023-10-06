@@ -1,4 +1,3 @@
-
 #include "Map.h"
 
 // Implementations for Map methods and operators go here.
