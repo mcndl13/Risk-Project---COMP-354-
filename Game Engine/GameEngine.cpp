@@ -87,3 +87,31 @@ void Command::setCommandName(string command) {
 string Command::getCommandName() {
     return commandName;
 }
+
+// This is part 2 of assignment #2
+// startupPhase function calls the following game commands
+/*
+- loadmap
+- validatemap
+- addplayer
+- gamestart (call draw() twice)
+
+*/
+void GameEngine::startupPhase(const vector<string>& mapFiles){
+
+    MapLoader::loadmap();
+
+
+    // This is an example of what to do. 
+    // 1. Create a deck 
+    // 2. Create a hand for each players
+    // 3. Draw cards
+    Hand* hand = new Hand(size_of_hand); //Create an object hand
+    cout << "# of cards a player can have is: " << hand->getSize() << '\n';
+    
+    for (int i =0; i <2; i++) { //draw two cards from deck
+		hand->addCardToHand(deck->draw());	//Draws and add the drawn card to the hand
+		cout << *deck << *hand;
+	}
+
+}
