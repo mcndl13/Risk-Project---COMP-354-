@@ -56,7 +56,7 @@ int main() {
     std::vector<std::string> mapFiles = {
         "solar.map",
         "german-Empire1871.map",
-        "002_I72_X-29.map"
+       
         // ... add more map file paths
     };
     testLoadMaps(mapFiles);
