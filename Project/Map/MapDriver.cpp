@@ -55,11 +55,16 @@ void testLoadMaps(const std::vector<std::string>& mapFiles) {
 
 int main() {
     std::vector<std::string> mapFiles = {
+        //valid maps
         "Mapfiles/solar.map",
         "Mapfiles/german-Empire1871.map",
-       
+        
+        //Invalid map
+        //"Mapfiles/3D Cliff.map"
+       //"Mapfiles/002_I72_X-29.map"
         // ... add more map file paths
     };
     testLoadMaps(mapFiles);
     return 0;
 }
+
