@@ -26,7 +26,8 @@ void testLoadMaps(const std::vector<std::string>& mapFiles) {
                 for (const auto& continent : map->getContinents()) {
                     if (!map->isContinentConnected(continent)) {
                         allContinentsConnected = false;
-                        std::cout << "Continent " << *(continent->getName()) << " is not a connected subgraph." << std::endl;
+                        std::cout << "Continent " << continent->getName() << " is not a connected subgraph." << std::endl;
+
                     }
                 }
                 if (allContinentsConnected) {
