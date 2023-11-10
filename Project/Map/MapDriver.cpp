@@ -2,16 +2,21 @@
 //The main function creates a vector of map file paths and passes it to testLoadMaps.
 //The testLoadMaps function iterates through each map file, loading, validating, and verifying the map according to the specified requirements.
 
+//g++ -std=c++17 ../Player/Player.cpp MapDriver.cpp Map.cpp ../Cards/Cards.cpp ../Orders/Orders.cpp (From Map directory)
 #include "Map.h"
 #include <vector>
+
 
 void testLoadMaps(const std::vector<std::string>& mapFiles) {
     for (const auto& mapFile : mapFiles) {
         MapLoader loader(mapFile);
         Map *map = loader.loadMap();
 
+
         if(map) {
             if (map->validate()) {
+
+
                 std::cout << "Valid map loaded from: " << mapFile << std::endl;
 
               
@@ -36,7 +41,7 @@ void testLoadMaps(const std::vector<std::string>& mapFiles) {
 
                 
                 if (map->isTerritoryInOneContinent()) {
-                    std::cout << "Each territory belongs to one and only one continent." << std::endl;
+                    std::cout << "Each territory belongs to one and only one continent.\n\n" << std::endl;
                 } else {
                     std::cout << "There are territories belonging to more than one continent." << std::endl;
                 }
@@ -47,8 +52,9 @@ void testLoadMaps(const std::vector<std::string>& mapFiles) {
 
             delete map;  // Clean up memory
 
-        } else {
-            std::cout << "Could not load map from: " << mapFile << std::endl;
+        } 
+        else {
+            std::cout << "\nCould not load map from: " << mapFile << std::endl;
         }
     }
 }
@@ -57,7 +63,7 @@ int main() {
     std::vector<std::string> mapFiles = {
         //valid maps
         "Mapfiles/solar.map",
-        "Mapfiles/german-Empire1871.map",
+        "Mapfiles/german-Empire1871.map"
         
         //Invalid map
         //"Mapfiles/3D Cliff.map"
@@ -67,4 +73,3 @@ int main() {
     testLoadMaps(mapFiles);
     return 0;
 }
-
