@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <cstring>  
 using namespace std;
 
 // Implementations for Map methods and operators go here.
@@ -64,7 +65,10 @@ Map& Map::operator=(const Map &m) {
 
 
 bool Map::isContinentConnected(Continent *continent) const {
-    if (continent->getTerritories().empty()) return false;
+    if (continent->getTerritories().empty()){
+        return false;
+    }
+
 
     unordered_set<Territory*> visited;
     dfs(continent->getTerritories()[0], continent, visited);  // Passing continent as an additional argument and start DFS from the first territory
@@ -154,6 +158,10 @@ const vector<Continent*>& Map::getContinents() const {  // Implementation of get
     return continents;
 }
 
+const vector<Territory*>& Map::getTerritory() const {  // Implementation of getContinents method
+    return territories;
+}
+
 
 
 
@@ -192,7 +200,7 @@ const vector<Continent*>& Map::getContinents() const {  // Implementation of get
     ostream& operator<<(ostream &out, const vector<Territory*>& territory_list){
 
         for(Territory* temp: territory_list){
-            out << "-  " << *temp;
+            out << "-  " << temp;
             out << "\n"; 
         }
         out << "\n\n";
@@ -203,8 +211,8 @@ const vector<Continent*>& Map::getContinents() const {  // Implementation of get
 
 
     // overloading output stream operator cards
-    ostream& operator<<(std::ostream &out, const Territory &t){
-        out << "The territories's name is: " << t.name;
+    ostream& operator<<(std::ostream &out, const Territory* t){
+        out << "The territories's name is: " << t->getName() << "\n";
         return out;
     }
 
@@ -272,6 +280,13 @@ const vector<Continent*>& Map::getContinents() const {  // Implementation of get
         return *name;
     }
 
+    ostream& operator<<(std::ostream &os, const Continent* c){
+        os << c->getName() << "\n";
+        return os;
+    }
+
+
+
 
 
 
@@ -281,23 +296,29 @@ const vector<Continent*>& Map::getContinents() const {  // Implementation of get
 // Implementations for MapLoader methods. Handle file reading and parsing here.
 
 MapLoader::MapLoader(const std::string &filePath) {
-    this->filePath = new std::string(filePath);
+    this->filePath = filePath;
 }
 
 MapLoader::~MapLoader() {
-    delete filePath;
+    // delete filePath;
 }
 
 Map* MapLoader::loadMap() {
-    std::ifstream file(*filePath);
+
+// Open the file
+std::ifstream file(filePath);
    if (!file) {
-        std::cerr << "Error: could not open file: " << *filePath << std::endl;
+        std::cerr << "Error: could not open file: " << filePath << std::endl;
         return nullptr;
     }
+
+    
 
     Map* map = new Map();
     std::string line;
     std::map<std::string, Territory*> territoryMap;  // To lookup territories by name
+    vector<string> temp;
+
 
     while (getline(file, line)) {
         std::stringstream ss(line);
@@ -308,50 +329,88 @@ Map* MapLoader::loadMap() {
                 std::stringstream ss(line);
                 std::string name, value;
                 getline(ss, name, '=');
+
+                std::istringstream tokenStream(name);
+                while (getline(tokenStream, name, ' ')) {
+                    temp.push_back(name);
+                }
+
                 getline(ss, value, '=');
-                Continent* continent = new Continent(name);
+                Continent* continent = new Continent(temp.at(0));
                 map->addContinent(continent);
+                temp.clear();
             }
-        } else if (line.find("[territories]") != std::string::npos) {
+
+        
+        } else if (line.find("[countries]") != std::string::npos) {
             while (getline(file, line) && !line.empty()) {
                 std::stringstream ss(line);
-                std::string name, x_coord, y_coord, continent_name;
+                std::string name, x_coord, y_coord;
                 getline(ss, name, ',');
                 getline(ss, x_coord, ',');
                 getline(ss, y_coord, ',');
-                getline(ss, continent_name, ',');
+
+
+                std::istringstream tokenStream(name);
+                while (getline(tokenStream, name, ' ')) {
+                    // cout << name << "-";
+                    temp.push_back(name);
+                }
+
+
+                vector<string> contient_name;
+
+
+                std::istringstream tokenStream1(temp.at(1));
+                while (getline(tokenStream1, temp.at(1), '-')) {
+                    contient_name.push_back(temp.at(1));
+                }
+
+                string c_name = contient_name.at(0);
+
                 
-                Territory* territory = new Territory(name);
+                Territory* territory = new Territory(temp.at(1));
                 map->addTerritory(territory);
-                territoryMap[name] = territory;  // Store territory for later adjacency setup
+                territoryMap[temp.at(0)] = territory;  // Store territory for later adjacency setup
 
                 // Check if territory has already been assigned to a continent
-                if (assignedTerritories.find(name) != assignedTerritories.end()) {
-                    std::cerr << "Territory " << name << " is assigned to more than one continent." << std::endl;
+                if (assignedTerritories.find(temp.at(1)) != assignedTerritories.end()) {
+                    std::cerr << "Territory " << temp.at(1) << " is assigned to more than one continent." << std::endl;
                     delete map;  // free memory
                     return nullptr;  // return null if a territory is assigned to more than one continent
                 }
                 assignedTerritories.insert(name);  // Mark territory as assigned
 
                 // Assuming continent names are unique and have been read already
-                for (auto continent : map->getContinents()) {
-                    if ((continent->getName()) == continent_name) {
+                for (Continent* continent : map->getContinents()) {
+                    if ((continent->getName()) == c_name) {
                         continent->addTerritory(territory);
                         break;
                     }
                 }
+                temp.clear();
             }
-        } else if (line.find("[adjacencies]") != std::string::npos) {
+        } else if (line.find("[borders]") != std::string::npos) {
             while (getline(file, line) && !line.empty()) {
                 std::stringstream ss(line);
                 std::string name, adj_name;
                 getline(ss, name, ',');
-                Territory* territory = territoryMap[name];  // Assuming territory names are unique
                 
-                while (getline(ss, adj_name, ',')) {
-                    Territory* adj_territory = territoryMap[adj_name];  // Assuming adj_name exists
+                std::istringstream tokenStream(name);
+
+                while (getline(tokenStream, name, ' ')) {
+                    temp.push_back(name);
+                }
+
+
+                Territory* territory = territoryMap[temp.at(0)];  // Assuming territory names are unique
+
+                for(int i = 1; i < temp.size(); i++){
+                    Territory* adj_territory = territoryMap[temp.at(i)];  // Assuming adj_name exists
                     territory->addAdjacency(adj_territory);
                 }
+
+                temp.clear();
             }
         }
     }
