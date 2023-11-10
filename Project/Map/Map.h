@@ -24,6 +24,7 @@ class Map {
         bool isConnectedGraph() const;  // new method for verification if the map is a connected graph
         bool isTerritoryInOneContinent() const;  // new method for verification if territory or country belongs to one and one continent
         const std::vector<Continent*>& getContinents() const;  // new method to get continents
+        const std::vector<Territory*>& getTerritory() const;
 
     private:
 
@@ -35,14 +36,15 @@ class Map {
 
 
 class MapLoader {
-public:
-    MapLoader(const std::string &filePath);
-    ~MapLoader();
-    Map* loadMap();
+    public:
+        MapLoader(const std::string &filePath);
+        ~MapLoader();
+        Map* loadMap();
+        Map* createMapfromFile (std::string map_file_path);
 
-private:
-    std::string *filePath;
-    std::unordered_set<std::string> assignedTerritories;  // New data member to track assigned territories
+    private:
+        std::string filePath;
+        std::unordered_set<std::string> assignedTerritories;  // New data member to track assigned territories
 };
 
 
@@ -57,7 +59,7 @@ class Continent {
 
         Continent(const Continent &c); // copy constructor
         Continent& operator=(const Continent &c); // assignment operator
-        friend std::ostream& operator<<(std::ostream &os, const Continent &c); // stream insertion operator
+        friend std::ostream& operator<<(std::ostream &os, const Continent* c); // stream insertion operator
 
         const std::string& getName() const;
 
@@ -79,7 +81,7 @@ class Territory {
 
         Territory(const Territory &t); // copy constructor
         Territory& operator=(const Territory &t); // assignment operator
-        friend std::ostream& operator<<(std::ostream &out, const Territory &t); // stream insertion operator
+        friend std::ostream& operator<<(std::ostream &out, const Territory* t); // stream insertion operator
         friend std::ostream& operator<<(std::ostream &out, const std::vector<Territory*>&); // stream insertion operator
     
 
