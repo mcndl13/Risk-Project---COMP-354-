@@ -25,7 +25,6 @@ class Map {
         bool isTerritoryInOneContinent() const;  // new method for verification if territory or country belongs to one and one continent
         const std::vector<Continent*>& getContinents() const;  // new method to get continents
         const std::vector<Territory*>& getTerritory() const;
-
     private:
 
         void dfs(Territory* territory, Continent* continent, std::unordered_set<Territory*>& visited) const;  // method for DFS traversal
@@ -92,7 +91,8 @@ class Territory {
 
         void addAdjacency(Territory *territory);
         const std::vector<Territory*>& getAdjacencies() const;
-
+        void SetOwner(std::string owner_Name);
+        std::string GetOwner();
     private:
         std::string name;
         std::string *owningPlayer;

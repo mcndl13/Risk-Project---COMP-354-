@@ -30,7 +30,7 @@ class Orders {
 
         std::string getDescription();
 		void setDescription(std::string);
-
+		bool checkNegotiate(Player* playerA, std::string playerB);
         friend std::ostream& operator<<(std::ostream& out, const Orders& order);
 		// friend std::ostream& operator<< (std::ostream& out, const std::vector<Orders*> orders);
 };
@@ -91,18 +91,39 @@ class Advance : public Orders {
 		Player* order_owner;
 		std::string order_name = "Advance";
 		Territory* order_target;
+		Territory* order_source;
+		int army_num;
 
 	public:
-		Advance(Player* order_owner, const std::string& inDescription, Territory* target);
+		Advance(Player* player, const std::string& inDescription, int num, Territory* source, Territory* target);
 
 		bool validate() override;
 		void execute() override;
 		std::string getName() override;
-
+		bool isAdjacentWith();
 		friend std::ostream& operator << (std::ostream& out, Advance&); // Stream insertion operator
 		Advance& operator = (const Advance& advance); //Assignment operator
 };
 
+class Airlift : public Orders {
+
+private:
+	Player* order_owner;
+	std::string order_name = "Airlift";
+	Territory* order_target;
+	Territory* order_source;
+	int army_num;
+
+public:
+	Airlift(Player* order_owner, const std::string& inDescription, int num, Territory* source, Territory* target);
+
+	bool validate() override;
+	void execute() override;
+	std::string getName() override;
+
+	friend std::ostream& operator << (std::ostream& out, Airlift&); //Assignment operator
+	Airlift& operator = (const Airlift& airlift); //Assignment operator
+};
 
 
 
@@ -119,7 +140,7 @@ class Bomb : public Orders {
 		bool validate() override;
 		void execute() override;
 		std::string getName() override;
-
+		bool isAdjacentWith();
 		friend std::ostream& operator << (std::ostream& out, Bomb&); //Assignment operator
 		Bomb& operator = (const Bomb& bomb); //Assignment operator
 };
@@ -147,23 +168,7 @@ class Blockade : public Orders {
 
 
 
-class Airlift : public Orders {
 
-	private:
-		Player* order_owner;
-		std::string order_name = "Airlift";
-		Territory* order_target;
-
-	public:
-		Airlift(Player* order_owner, const std::string& inDescription, Territory* target);
-
-		bool validate() override;
-		void execute() override;
-		std::string getName() override;
-
-		friend std::ostream& operator << (std::ostream& out, Airlift&); //Assignment operator
-		Airlift& operator = (const Airlift& airlift); //Assignment operator
-};
 
 
 
@@ -172,11 +177,10 @@ class Negotiate : public Orders {
 	private:
 		Player* order_owner;
 		std::string order_name = "Negotiate";
-		Territory* order_target;
 		Player* target_player;
 
 	public:
-		Negotiate(Player* order_owner, const std::string& inDescription, Territory* target, Player* p_target);
+		Negotiate(Player* order_owner, const std::string& inDescription,  Player* p_target);
 
 		bool validate() override;
 		void execute() override;

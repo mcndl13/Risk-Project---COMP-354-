@@ -234,12 +234,18 @@ const vector<Territory*>& Map::getTerritory() const {  // Implementation of getC
     int Territory::get_number_of_armies(){
         return numArmies;
     }
+    
+    std::string Territory::GetOwner() {
+        return *owningPlayer;
+    }
 
     void  Territory::adding_armies_number(int number){
         numArmies += number;
     }
 
-
+    void Territory::SetOwner(std::string owner_name) {
+        *owningPlayer = owner_name;
+    }
 
 
 

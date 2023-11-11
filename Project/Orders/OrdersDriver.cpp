@@ -20,7 +20,7 @@ void testOrdersLists (){
 
 
     Deploy *order1 = new Deploy(player1, "Deploy", territory1, 5);
-    Advance *order2 = new Advance(player2, "Advance", territory2);
+    Advance *order2 = new Advance(player2, "Advance",5, territory2,territory3);
     Bomb *order3 = new Bomb(player1, "Bomb", territory3);
     Blockade *order4 = new Blockade(player2, "Blockade", territory4);
 

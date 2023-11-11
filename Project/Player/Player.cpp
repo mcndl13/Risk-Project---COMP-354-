@@ -79,12 +79,12 @@ void Player::issueOrder(string order_type){
 
 
     if (order_type == "Deploy"){
-        // 
+        //TODO: hook input with this commend
         player_orders->addOrders(new Deploy(this, "deploy troops", this->toDefend().at(1), 5), this);
     }
 
-    else if (order_type == "Advance")
-        player_orders->addOrders(new Advance(this, "Advance troops", this->toAttack().at(0)), this);
+    else if (order_type == "Advance")//TODO: hook input with this commend
+        player_orders->addOrders(new Advance(this, "Advance troops",5, this->toAttack().at(0),this->toAttack().at(1)), this);
 
     
     else if (order_type == "Bomb")
@@ -96,8 +96,8 @@ void Player::issueOrder(string order_type){
         player_orders->addOrders(new Blockade(this, "Blockade installed", this->toAttack().at(0)),this);
 
 
-    else if (order_type == "Airlift")
-        player_orders->addOrders(new Airlift(this, "Airlift issued", this->toAttack().at(0)), this);
+    else if (order_type == "Airlift")//TODO: hook input with this commend
+        player_orders->addOrders(new Airlift(this, "Airlift issued",5, this->toAttack().at(0),this->toAttack().at(1)), this);
 
     
     else
@@ -148,7 +148,22 @@ string Player::getName(){
 }
 
 
-
+std::vector<std::string> Player::getDiplomacyNames() {
+    return diplomacyPlayersName;
+}
+void Player::addDiplomacy(std::string name) {
+    diplomacyPlayersName.push_back(name);
+}
+void Player::resetDiplomacy() {
+    diplomacyPlayersName.clear();
+}
+bool Player::getConquer() {
+    return hasConquered;
+}
+void Player::setConquer(bool has_conquer)
+{
+    hasConquered = has_conquer;
+}
 
 // Adding new territory to the list of territory owned by a player
 void Player::add_new_player_territory(Territory* territory) {
