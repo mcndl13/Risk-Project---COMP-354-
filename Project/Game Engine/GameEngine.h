@@ -1,9 +1,16 @@
+
+class CommandProcessor;
+class Deck;
+#include "../Map/Map.h"
+#include "../Player/Player.h"
+
 #ifndef HEADER_NAME_H
 #define HEADER_NAME_H
 
 #include <string>
 #include <map>
 #include <iostream>
+
 
 
 // Class to represent a state in the game.
@@ -25,6 +32,9 @@ class State {
         // Method to retrieve the next state based on a given command.
         State* getTransition(std::string command);
 
+        friend std::ostream& operator<<(std::ostream& out, const State*);
+
+
     private:
         // Name of the state.
         std::string stateName;
@@ -37,6 +47,7 @@ class State {
 
 // Class representing the game engine responsible for managing game states.
 class GameEngine {
+
     public:
         GameEngine(State* startState); // Constructor initializes with a start state
 
@@ -50,29 +61,23 @@ class GameEngine {
 
 
 
-        void startupPhase();
+
+        void startupPhase(CommandProcessor*);
         void mainGameLoop();
+        void setMap(Map* map);
+
 
     private:
+
         // Pointer to the current active state.
         State* currentState;
         // Pointer to the initial start state.
         State* initialState;
+
+        Map* game_map;
+        Deck* game_deck;
+        std::vector<Player*> list_of_Players;
+
+
 };
-
-// Class to represent commands.
-class Command {
-    public:
-        Command();// Default constructor.
-
-
-        // Setter and Getter for the command name.
-        void setCommandName(std::string command);
-        std::string getCommandName();
-
-    private:
-        // Name of the command.
-        std::string commandName;
-};
-
 #endif // GAME_ENGINE_H
