@@ -63,7 +63,10 @@ ostream& operator<<(ostream& out, const State* state){
 
 // Constructor: Initializes the game engine with the provided start state.
 GameEngine::GameEngine(State* startState) 
-			: initialState(startState), currentState(startState), game_map(), list_of_Players(), game_deck() {}
+			: initialState(startState), currentState(startState), game_map(), list_of_Players() {
+
+				game_deck = new Deck();
+			}
 
 // Processes the given command, moves to the next state if valid, and provides feedback.
 
@@ -165,44 +168,49 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor){
 
 			case (commandType::addplayer) :
 
-				if(commandProcessor->validate(command, this)){
+				if (commandProcessor->validate(command, this)) {
+					while (list_of_Players.size() < 6) {
+						if (list_of_Players.size() < 2) {
+							// Should only contain the name of the player
+							new_player_name = command->getCommandEffect();
+							list_of_Players.push_back(new Player(new_player_name, new Hand()));
+							cout << command->getCommandEffect() << " was successfully added to the game!\n\n";
 
-					while(list_of_Players.size() < 2){
+							if (list_of_Players.size() < 2) {
+								cout << "You still need " << 2 - list_of_Players.size() << " more player(s) to start the game.\n\n";
+								cout << "Enter a player: ";
+								cin >> new_player_name;
+								command->setCommandEffect(new_player_name);
+							} else {
+								cout << "The game has enough players to start!\n\n";
+							}
+						} else {
+							cout << "The current players are:\n";
+							for (Player* p : list_of_Players) {
+								cout << "- " << p->getName() << "\n";
+							}
 
-						if(list_of_Players.size() < 6){
-						// Should only conatin the name of the player
-						new_player_name = command->getCommandEffect();
-						list_of_Players.push_back(new Player(new_player_name, new Hand()));
-						cout << command->getCommandEffect() << " was sucessfuly added to the game!\n\n";
+							cout << "Do you want to add more players? (y/n): ";
+							char choice;
+							cin >> choice;
 
-						if(list_of_Players.size() < 2){
-							cout << "You still need 1 more players to start the game.\n\n";
+							if (choice == 'y' || choice == 'Y') {
+								// Should only contain the name of the player
+								cout << "Enter a player: ";
+								cin >> new_player_name;
+								command->setCommandEffect(new_player_name);
+								list_of_Players.push_back(new Player(new_player_name, new Hand()));
+								cout << command->getCommandEffect() << " was successfully added to the game!\n\n";
+							} else {
+								cout << "The game is at full capacity ("
+									<< list_of_Players.size() << " players).\n"
+									<< command->getCommandEffect() << " couldn't be added to the game.\n\n";
+								break;  // Exit the loop as the user doesn't want to add more players
+							}
 						}
-
-						else {
-							cout << "The game has now enough players to start!\n\n";
-						}
-					}
-					
-					else{
-						cout << "The game is at full capacity" 
-							 << "(" 
-							 << list_of_Players.at(0) << ", "
-							 << list_of_Players.at(1) << ", "
-							 << list_of_Players.at(2) << ", "
-							 << list_of_Players.at(3) << ", "
-							 << list_of_Players.at(4) << ", "
-							 << list_of_Players.at(5) <<
-							 ")\n"
-							 << command->getCommandEffect() << " couldn't be added to the game.\n\n";
-					}
-
-					}
-					cout << "The players are:\n";
-					for(Player* p: list_of_Players){
-						cout << "- " <<p->getName() << "\n";
 					}
 				}
+
 				break;
 
 			case (commandType::gamestart):
@@ -225,7 +233,6 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor){
 					for (int i = 0; i < min_territory_per_player; i++)
 					{
 						random_territory_index = rand() % remaining_territories.size();
-						cout << "Territory index: " << random_territory_index << endl;
 
 						p->add_new_player_territory(remaining_territories.at(random_territory_index));
 
@@ -233,12 +240,16 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor){
 					}
 				}
 
+
 				// case 1): number territories > number players
 				// case 2): number territories < number players
 				random_player_index = rand() % list_of_Players.size();
 
+				
+
 				for (int i = 0; i < remaining_territories.size(); i++)
 				{
+					cout << remaining_territories.at(i);
 					if (!remaining_territories.empty())
 					{
 						random_territory_index = rand() % remaining_territories.size();
@@ -251,20 +262,35 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor){
 				// b) determine randomly the order of play of the players in the game
 				// c) give 50 initial army units to the players, which are placed in their respective reinforcement pool
 
-				for(Player* p : list_of_Players) {
+					
+				for (Player* p : list_of_Players) {
+
 					// Fix: Ensure the random_player_index is within the valid range
-					random_player_index = rand() % list_of_Players.size();
+					if (!list_of_Players.empty()) {
+						random_player_index = rand() % list_of_Players.size();
 
-					playing_order.push_back(list_of_Players.at(random_player_index));
+						if (random_player_index < 0 || random_player_index >= list_of_Players.size()) {
+							cerr << "Error: Invalid random_player_index\n";
+							exit(EXIT_FAILURE);
+						}
 
-					// Give each player 50 armies
-					p->setReinforcementPool(50);
-					p->getHand()->addCardToHand(game_deck->draw());
-					p->getHand()->addCardToHand(game_deck->draw());
+						playing_order.push_back(list_of_Players.at(random_player_index));
+
+						// Give each player 50 armies
+						p->setReinforcementPool(50);
+						cout << "- " << p->getName() << " is drawing:\n\n";
+						p->getHand()->addCardToHand(game_deck->draw());
+						p->getHand()->addCardToHand(game_deck->draw());
+					}
 				}
 
 
-				this->processCommand("gamestart"); // might be assigncountries don't forget to change
+
+					 
+				if(this->processCommand("assigncountries")){ // might be assigncountries don't forget to change
+					cout << "\n\n\nPhase: play!\n\n\n";
+
+				}
 				break;
 
 			
@@ -294,3 +320,156 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor){
 	// }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////// erase ////////////////////////////////////////////OOOOOOOOOOOOOOOOOOOOOO
+// void GameEngine::startupPhase(CommandProcessor* cp) {
+// 	// Use the command list to get the commands, make sure to change states in between commands
+// 	for (Command* c : cp->getCommandList()) {
+// 		string command = c->getCommandStr();
+
+// 		if (command == "loadmap") {
+// 			// Load the map (how to parse the filename from the command?)
+// 			string effect = c->getEffect();
+// 			std::regex extractionPattern(".*(.*\\.map).*");
+// 			std::smatch match;
+
+// 		// 	// We found a map file name from the commmand's effect!
+// 			if (std::regex_search(effect, match, extractionPattern)) {
+// 				string mapFileName = "Assets/" + (string)match[1];
+// 				setMap(MapLoader::createMapfromFile(mapFileName));
+// 				changeState("validatemap");
+// 			}
+// 		}
+
+// 		// Do I have to check if we are in a valid state before executing the command?
+// 		else if (command == "validatemap") {
+// 			// Validate the map
+// 			map->validate();
+
+// 			if (map->isValid()) {
+// 				changeState("addplayer");
+// 			}
+
+// 			else {
+// 				// Does the state go back to loadmap, or do we just fail and exit?
+// 				cout << "An invalid map has been loaded." << endl;
+// 			}
+// 		}
+
+// 		else if (command == "addplayer") {
+// 			// Add player (This part should loop so as to ensure that we have 2-6 players in the game.)
+// 			string effect = c->getEffect();
+
+// 			std::regex extractionPattern("(.*) player has been added");
+// 			std::smatch match;
+
+// 			// Check to see if we have 2-6 players in the game
+
+// 			if (players.size < 6) {
+// 				if (std::regex_search(effect, match, extractionPattern)) {
+// 					addPlayer(new Player(match[1], new Hand));
+// 				}
+// 			}
+
+// 			else {
+// 				// Let the user know that they cannot add anymore players
+// 				cout << "Limit of players in game has been reached, no new players may be added." << endl;
+// 			}
+
+
+// 			if (players.size >= 2) {
+// 				// Switch states
+// 				changeState("gamestart");
+// 			}
+
+// 			else {
+// 				// Let the user know that there needs to be more players for the game to start
+// 			}
+// 		}
+
+// 		else if (command == "gamestart") {
+// 			/* Gamestart command does the following:
+// 			*  a) Evenly pass out territories to players (what happens when there aren't enough to go around?).
+
+// 			*  b) Determine the order in which players get their turns (Randomly rearrange this class's Players list)
+
+// 			*  c) Give 50 armies to each player, which are placed in their respective reinforcement pool (new Player field)
+
+// 			*  d) Let each player draw 2 cards from the deck using Deck's draw() method (Call Player.getHand()->push_back(Deck.draw())?)
+
+// 			*  e) Switch the game to the "play" state. (Call mainGameLoop())
+// 			*/
+			
+// 			// Assign territories - TODO: Come up with a way to fairly distribute all countries between players
+// 			for (Player* p : players) {
+
+// 			}
+
+// 			// Determine the turn order randomly - Re-arrange the players in the vector
+			
+// 			// Store randomly sorted arrangement of players
+			
+
+// 			// Initialize random seed
+// 			srand(time(NULL));
+
+// 			while (players.size() > 0) {
+// 				// Generate a random number from 0 to the final index in the players vector
+// 				int choose = rand() % (players.size() - 1);
+
+// 				// Place randomly selected player in new vector
+// 				tmp.push_back(players.at(choose));
+
+// 				// Exclude newly placed player from next choice
+// 				players.erase(players.begin()+choose);
+// 			}
+
+// 			// Reset players vector
+// 			for (Player* player : tmp) {
+// 				players.push_back(player);
+// 			}
+
+// 			// Give each player 50 armies to begin with and let them draw 2 cards from the deck
+// 			for (Player* p : players) {
+// 				p->setReinforcementPool(50);
+
+// 				// TODO: I think the GameEngine needs its own deck?
+				
+// 			}
+
+// 			// Switch the game to the play phase
+// 			mainGameLoop();
+// 		}
+// 	}
+// }
