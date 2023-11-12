@@ -9,7 +9,7 @@ Player::Player(Hand* p_hand){
     player_Name = "player1";
     player_hand = p_hand;
     player_orders = new OrdersList();
-    
+    reinforcementPool = 0;
 }
 
 
@@ -17,6 +17,7 @@ Player::Player(string pName, Hand* p_hand){
     player_Name = pName;
     player_hand = p_hand;
     player_orders = new OrdersList();
+    reinforcementPool = 0;
 }
 
 
@@ -27,6 +28,7 @@ Player::Player(const Player &p){
     player_hand = new Hand (*(p.player_hand));
     owned_territories = p.owned_territories;
     player_orders = new OrdersList(*(p.player_orders));
+    reinforcementPool = p.reinforcementPool;
 }
 
 // Destructor
@@ -146,6 +148,17 @@ deque<Orders*>& Player::getOrders(){
 string Player::getName(){
     return player_Name;
 }
+
+
+int Player::getReinforcementPool(){
+    return reinforcementPool;
+}
+
+void Player::setReinforcementPool(int r){
+    reinforcementPool = r;
+    cout << "\n\nReinforcement pool is now: " << r << endl;;
+}
+
 
 
 std::vector<std::string> Player::getDiplomacyNames() {
