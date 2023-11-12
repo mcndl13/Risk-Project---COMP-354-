@@ -1,0 +1,45 @@
+#include "LoggingObserver.h"
+#include "Map.h"
+
+// REMAINING TO IMPLEMENT AND INHERIT Command, CommandProcessor, Order, OrderList, and GameEngine classes are implemented as per previous parts
+// and they all inherit from Subject and ILoggable
+
+void testLoggingObserver() {
+    // Setup subjects and observer
+    LogObserver logObserver("gamelog.txt");
+
+    CommandProcessing commandProcessor;
+    commandProcessor.attach(&logObserver);
+
+    OrderList orderList;
+    orderList.attach(&logObserver);
+
+    GameEngine gameEngine;
+    gameEngine.attach(&logObserver);
+
+    // Simulate game actions
+    Command command("loadmap", "Map loaded successfully");
+    commandProcessor.saveCommand(command);
+    command.saveEffect("Map effect applied");
+
+    Orders* order = new DeployOrder(); // Assuming DeployOrder is a concrete class derived from Order
+    orderList.addOrder(order);
+
+    // Execute an order and log its effect
+    order->execute(); // Assuming this changes the internal state of the order to reflect execution
+
+    // Transition the GameEngine state and log the change
+    gameEngine.transition("start");
+
+    // Clean up
+    gameEngine.detach(&logObserver);
+    orderList.detach(&logObserver);
+    commandProcessor.detach(&logObserver);
+
+    delete order; // Assuming dynamic allocation was used for orders
+}
+
+int main() {
+    testLoggingObserver();
+    return 0;
+}
