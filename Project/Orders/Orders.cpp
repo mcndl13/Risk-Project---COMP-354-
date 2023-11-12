@@ -119,8 +119,11 @@ using namespace std;
 
 
 //=================== Advance class =======================
-    Advance::Advance(Player* order_owner, const string& inDescription, Territory* target): Orders(inDescription){
+    Advance::Advance(Player* order_owner, const string& inDescription, int num, Territory* source, Territory* target): Orders(inDescription){
         order_owner = order_owner;
+        order_target = target;
+        army_num = num;
+        order_source = source;
         order_target = target;
     }
 
@@ -207,10 +210,14 @@ using namespace std;
 
 
 //=================== Airlift class =======================
-    Airlift::Airlift(Player* order_owner, const string& inDescription, Territory* target): Orders(inDescription){
+    Airlift::Airlift(Player* order_owner, const string& inDescription, int num, Territory* source, Territory* target): Orders(inDescription){
         order_owner = order_owner;
         order_target = target;
+        army_num = num;
+        order_source = source;
+        order_target = target;
     }
+
     bool Airlift::validate() {return true;}
     void Airlift::execute(){}
     string Airlift::getName() {return order_name;}
@@ -231,11 +238,11 @@ using namespace std;
 
 //=================== Negotiate class =======================
 
-    Negotiate::Negotiate(Player* order_owner, const string& inDescription, Territory* t_target, Player* p_target): Orders(inDescription){
+    Negotiate::Negotiate(Player* order_owner, const string& inDescription, Player* p_target): Orders(inDescription){
         order_owner = order_owner;
-        order_target = t_target;
         target_player = p_target;
     }
+
     bool Negotiate::validate() {return true;}
     void Negotiate::execute(){}
     string Negotiate::getName() {return order_name;}
@@ -249,7 +256,7 @@ using namespace std;
     //Assignment operator overload
     Negotiate& Negotiate::operator = (const Negotiate& negotiate){
         order_owner = negotiate.order_owner;
-        order_target = negotiate.order_target;
+        target_player = negotiate.target_player;
         return *this;
     }
 
