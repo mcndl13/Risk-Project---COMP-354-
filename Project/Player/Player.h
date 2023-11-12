@@ -31,6 +31,9 @@ class Player {
         Hand* getHand();
         std::string getName();
 
+        int getReinforcementPool();
+        void setReinforcementPool(int);
+
         void add_new_player_territory(Territory *territory);
 
         std::vector<std::string> getDiplomacyNames();
