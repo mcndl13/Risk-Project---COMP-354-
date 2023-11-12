@@ -91,13 +91,13 @@ class Territory {
 
         void addAdjacency(Territory *territory);
         const std::vector<Territory*>& getAdjacencies() const;
-        // void SetOwner(std::string owner_Name);
-        // std::string GetOwner();
+        //void SetOwner(std::string owner_Name);
+        //std::string GetOwner();
         Player* get_owning_player();
         void set_owning_player(Player*);
     private:
         std::string name;
-        // std::string *owningPlayer;
+        //std::string *owningPlayer;
         Player *owningPlayer;
         int numArmies;
         std::vector<Territory*> adjacencies;
