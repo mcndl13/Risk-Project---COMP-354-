@@ -1,7 +1,7 @@
 #include "LoggingObserver.h"
 #include "Map.h"
 
-// REMAINING TO IMPLEMENT AND INHERIT Command, CommandProcessor, Order, OrderList, and GameEngine classes are implemented as per previous parts
+// REMAINING TO IMPLEMENT AND INHERIT Command, CommandProcessor, Order, OrderList, and GameEngine classes 
 // and they all inherit from Subject and ILoggable
 
 void testLoggingObserver() {
