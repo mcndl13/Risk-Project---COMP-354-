@@ -1,10 +1,10 @@
 #include <iostream>
-#include "Map.h"
 #include <algorithm>  // for find
 #include <fstream>
 #include <sstream>
 #include <map>
 #include <cstring>  
+#include "Map.h"
 #include "../Player/Player.h"
 using namespace std;
 
@@ -159,7 +159,7 @@ const vector<Continent*>& Map::getContinents() const {  // Implementation of get
     return continents;
 }
 
-const vector<Territory*>& Map::getTerritory() const {  // Implementation of getContinents method
+const vector<Territory*> Map::getTerritory() const {  // Implementation of getContinents method
     return territories;
 }
 
@@ -169,18 +169,18 @@ const vector<Territory*>& Map::getTerritory() const {  // Implementation of getC
 
 
 // Implementations for Territory methods and operators go here. 
-    Territory::Territory(const string &name): owningPlayer {
+    Territory::Territory(const string &name): owningPlayer(){
         this->name = name;
         owningPlayer = nullptr;
         numArmies = 0;
     }
 
     Territory::~Territory() {
-        delete owningPlayer;       
+        delete owningPlayer;
         adjacencies.clear();
     }
 
-    Territory::Territory(const Territory &t): owningPlayer {
+    Territory::Territory(const Territory &t): owningPlayer() {
         name = t.name;
         owningPlayer = t.owningPlayer;  
         numArmies = t.numArmies;
@@ -237,20 +237,18 @@ const vector<Territory*>& Map::getTerritory() const {  // Implementation of getC
         return numArmies;
     }
 
-    // Use a Player pointer as two players may have the same name
-    // std::string Territory::GetOwner() {
-    //     return *owningPlayer;
-    // }
+    void  Territory::adding_armies_number(int number){
+        numArmies += number;
+    }
 
-    // void Territory::SetOwner(std::string owner_name) {*owningPlayer = owner_name;}
+    Player* Territory::get_owning_player(){
+        return owningPlayer;
+    }
 
-    Player* Territory::get_owning_player(){return owningPlayer;}
-    void Territory::set_owning_player(Player* p){owningPlayer = p;}
+    void Territory::set_owning_player(Player* p){
+        owningPlayer = p;
+    }
 
-    void  Territory::adding_armies_number(int number){numArmies += number;}
-
-
-    
 
 
 
