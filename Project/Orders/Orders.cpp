@@ -396,11 +396,19 @@ using namespace std;
         if (validate()) {
             setDescription("Blockade order has been executed.\n");
             order_target->adding_armies_number(order_target->get_number_of_armies());
-            // if(){
-            //     order_target->set_owning_player()
-            // }
-            //TODO: set owner to neutral
-            //TODO: need to create neutral if doesn't exist
+            // for(auto it : engine->GetPlayerList()){
+        //  
+        //  if(it->GetName()=="Neutral"){
+        //        order_target->set_owning_player(it);
+        //          return;//go out of function
+        //      }
+        // }
+        //TODO: set owner to neutral
+        //TODO: need to create neutral if doesn't exist
+            Player* neutralPlayer = new Player("Neutral", new Hand());
+            //if we have engine referance push it into the player list
+            //engine->GetPlayerList().pushback(neutralPlayer);
+            order_target->set_owning_player(neutralPlayer);
         }
     }
 
@@ -453,9 +461,11 @@ using namespace std;
     void Negotiate::execute(){
         if (validate()) {
             setDescription("Negotiate order has been executed.");
-            //TODO: change a bool or set up a pair in a list
-            //      to make two player linked
+            target_player->addDiplomacy(order_owner->getName());
+            order_owner->addDiplomacy(target_player->getName());
+            return;
         }
+        setDescription("Negotiate order failed to execute because of invalidation.");
 
         
     }
