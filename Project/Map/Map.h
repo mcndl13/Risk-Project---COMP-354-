@@ -5,6 +5,7 @@
 
 class Continent;
 class Territory;
+class Player;
 
 class Map {
 
@@ -24,7 +25,8 @@ class Map {
         bool isConnectedGraph() const;  // new method for verification if the map is a connected graph
         bool isTerritoryInOneContinent() const;  // new method for verification if territory or country belongs to one and one continent
         const std::vector<Continent*>& getContinents() const;  // new method to get continents
-        const std::vector<Territory*>& getTerritory() const;
+        const std::vector<Territory*> getTerritory() const;
+
     private:
 
         void dfs(Territory* territory, Continent* continent, std::unordered_set<Territory*>& visited) const;  // method for DFS traversal
@@ -86,18 +88,16 @@ class Territory {
 
         std::string getName() const;
         int get_number_of_armies();
+        Player* get_owning_player();
+        void set_owning_player(Player*);
         void adding_armies_number(int);
         // int get_index_index();
 
         void addAdjacency(Territory *territory);
         const std::vector<Territory*>& getAdjacencies() const;
-        //void SetOwner(std::string owner_Name);
-        //std::string GetOwner();
-        Player* get_owning_player();
-        void set_owning_player(Player*);
+
     private:
         std::string name;
-        //std::string *owningPlayer;
         Player *owningPlayer;
         int numArmies;
         std::vector<Territory*> adjacencies;
