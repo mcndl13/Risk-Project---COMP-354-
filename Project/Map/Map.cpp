@@ -5,6 +5,7 @@
 #include <sstream>
 #include <map>
 #include <cstring>  
+#include "../Player/Player.h"
 using namespace std;
 
 // Implementations for Map methods and operators go here.
@@ -168,17 +169,18 @@ const vector<Territory*>& Map::getTerritory() const {  // Implementation of getC
 
 
 // Implementations for Territory methods and operators go here. 
-    Territory::Territory(const string &name) {
+    Territory::Territory(const string &name): owningPlayer {
         this->name = name;
         owningPlayer = nullptr;
         numArmies = 0;
     }
 
     Territory::~Territory() {
-        delete owningPlayer;
+        delete owningPlayer;       
+        adjacencies.clear();
     }
 
-    Territory::Territory(const Territory &t) {
+    Territory::Territory(const Territory &t): owningPlayer {
         name = t.name;
         owningPlayer = t.owningPlayer;  
         numArmies = t.numArmies;
@@ -234,18 +236,22 @@ const vector<Territory*>& Map::getTerritory() const {  // Implementation of getC
     int Territory::get_number_of_armies(){
         return numArmies;
     }
+
+    // Use a Player pointer as two players may have the same name
+    // std::string Territory::GetOwner() {
+    //     return *owningPlayer;
+    // }
+
+    // void Territory::SetOwner(std::string owner_name) {*owningPlayer = owner_name;}
+
+    Player* Territory::get_owning_player(){return owningPlayer;}
+    void Territory::set_owning_player(Player* p){owningPlayer = p;}
+
+    void  Territory::adding_armies_number(int number){numArmies += number;}
+
+
     
-    std::string Territory::GetOwner() {
-        return *owningPlayer;
-    }
 
-    void  Territory::adding_armies_number(int number){
-        numArmies += number;
-    }
-
-    void Territory::SetOwner(std::string owner_name) {
-        *owningPlayer = owner_name;
-    }
 
 
 
