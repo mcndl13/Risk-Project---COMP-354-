@@ -39,10 +39,12 @@ class Player {
         
         bool getConquer();
         void setConquer(bool has_conquer);
+
     private:
         std::string player_Name;
         std::vector<Territory*> owned_territories; // Collection of territories owned by a player
         bool hasConquered;
+        int reinforcementPool;
         std::vector<string> diplomacyPlayersName;
         Hand* player_hand;  // player hand
         OrdersList* player_orders; // List of orders
