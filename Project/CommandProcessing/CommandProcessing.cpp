@@ -212,6 +212,128 @@
     }
 
 
+class FileCommandProcessorAdapter {
+private:
+    FileLineReader fileLineReader;
+    std::vector<Command*> commands;
+    GameEngine* gameEngine; // Reference to the game engine for validation
+
+public:
+    // Constructor that takes the file path and game engine reference
+    FileCommandProcessorAdapter(const std::string& filePath, GameEngine* ge)
+        : fileLineReader(filePath), gameEngine(ge) {}
+
+    // Destructor to clean up commands
+    ~FileCommandProcessorAdapter() {
+        for (Command* cmd : commands) {
+            delete cmd;
+        }
+    }
+
+    // Read and save a command from the file
+  void FileCommandProcessorAdapter::saveCommand() {
+    std::string commandStr = fileLineReader.readFileLine();
+    if (!commandStr.empty()) {
+        std::istringstream iss(commandStr);
+        std::string commandTypeStr;
+        iss >> commandTypeStr;
+
+        // Convert the string to a CommandType enum
+        commandType cmdType;
+        if (commandTypeStr == "loadmap") cmdType = commandType::loadmap;
+        else if (commandTypeStr == "validatemap") cmdType = commandType::validatemap;
+        else if (commandTypeStr == "addplayer") cmdType = commandType::addplayer;
+        else if (commandTypeStr == "gamestart") cmdType = commandType::gamestart;
+        else if (commandTypeStr == "replay") cmdType = commandType::replay;
+        else if (commandTypeStr == "quit") cmdType = commandType::quit;
+        else cmdType = commandType::quit; // Default or unknown command
+
+        // Create a Command object and add it to the commands vector
+        Command* cmd = new Command(cmdType);
+        commands.push_back(cmd);
+    }
+}
+
+
+    // Get the next command (this could also be used to get the command if it's just been read)
+    Command* FileCommandProcessorAdapter::getCommand() {
+    if (!commands.empty()) {
+        Command* command = commands.back();
+        commands.pop_back();
+        return command;
+    }
+    return nullptr; // No command left
+}
+
+    // Validate the next command using the game engine
+    bool FileCommandProcessorAdapter::validate(Command* command) {
+    if (!command || !gameEngine) {
+        std::cerr << "Command or GameEngine reference is null" << std::endl;
+        return false;
+    }
+
+    std::string currentState = gameEngine->getCurrentStateName();
+
+    // Mapping from state names to valid commands in those states
+    std::map<std::string, std::vector<commandType>> validCommands = {
+        {"start", {commandType::loadmap}},
+        {"map_loaded", {commandType::validatemap}},
+        {"map_validated", {commandType::addplayer}},
+        {"players_added", {commandType::gamestart}},
+        // Add other states and their valid commands here
+    };
+
+    // Check if the current state has any valid commands
+    if (validCommands.find(currentState) == validCommands.end()) {
+        std::cerr << "Current state does not have any valid commands." << std::endl;
+        return false;
+    }
+
+    // Retrieve the list of valid commands for the current state
+    const std::vector<commandType>& validCommandsForState = validCommands[currentState];
+
+    // Check if the command's type is in the list of valid commands for the current state
+    if (std::find(validCommandsForState.begin(), validCommandsForState.end(), command->getCommandType()) != validCommandsForState.end()) {
+        // The command is valid for the current state
+        return true;
+    } else {
+        // The command is not valid for the current state
+        command->setCommandEffect("Invalid command for the current state: " + currentState);
+        return false;
+    }
+}
+};
+
+//=================== FileLineReader class =======================
+class FileLineReader {
+private:
+    std::ifstream fileStream;
+
+public:
+    FileLineReader(const std::string& filePath) {
+        fileStream.open(filePath);
+        if (!fileStream.is_open()) {
+            std::cerr << "Failed to open file: " << filePath << std::endl;
+        }
+    }
+
+    ~FileLineReader() {
+        if (fileStream.is_open()) {
+            fileStream.close();
+        }
+    }
+
+    std::string readFileLine() {
+        std::string line;
+        if (std::getline(fileStream, line)) {
+            return line;
+        }
+        return ""; // Return empty string if there is nothing to read or if we reached end of file
+    }
+}; 
+
+
+
 
 
 
