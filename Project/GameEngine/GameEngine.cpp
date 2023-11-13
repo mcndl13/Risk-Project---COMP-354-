@@ -91,6 +91,97 @@ string GameEngine::getCurrentStateName() {
     }
 }
 
+void GameEngine::re
+inforcementPhase(){
+    for(Player* player: list_of_players){
+        int territoriesOwned = player->toDefend().size();
+        int reinforcementUnits = std::max(3, territoriesOwned/3); // Minimum reinforcement rule
+
+        //check and assign continent control bonuses
+        for(Continent* continent: game_map->getContinents()){
+            if(player->ownsAllTerritoriesInContinent(continent))
+            {
+                reinforcementUnits += continent->getControlValue(); // Add control bonus value
+            }
+        }
+
+        player->AddReinforcementPool(reinforcementUnits); // Add to player's reinforcement pool
+    }
+}
+
+void GameEngine::issueOrdersPhase(){
+    bool allPLayersDone = false;
+    while(!allPlayersDone){
+        allPlayersDone = true;
+        for(Player* player: list_of_players){
+            if(player->hasReinforcements()){
+                player->issueOrder("deploy"); // Player issues a deploy order
+            } else{
+                // Player decides to issue advance or other orders based on their strategy
+                player->issueOrder("advance");
+                
+                // Check if the player wants to use a card
+                if(player->hasCards()){
+                    player->issueOrder("play card");
+                }
+            }
+
+            allPlayersDone &= player->isDoneIssuingOrders(); // Check if all players are done
+        }
+    }
+}
+
+void GameEngine::executeOrdersPhase(){
+    bool ordersPending = true;
+    while(ordersPending){
+        ordersPending = false;
+        for(Player* player: list_of_Players){
+            if(!player->getOrders().empty()){
+                Order* order = player->getNextOrder(); // Get the next order
+                if(order->validate()){
+                    // Validate before execution
+                    order->execute(); // Execute order
+                }
+                ordersPending = true; // Continue executing orders
+            }
+        }
+    }
+}
+
+void GameEngine::removeInactivePlayers(){
+    auto it = list_of_Players.begin();
+    while(it != list_of_Players.end()){
+        if((*it)->toDefend().empty()){
+            it = list_of_Players.erase(it); // Remove players with no territories
+        } else {
+            ++it;
+        }
+    }
+}
+
+bool GameEngine::checkGameOver(){
+    return list_of_Players.size() <= 1; // Game over when one or fewer players remain
+}
+
+void GameEngine::mainGameLoop(){
+    while(!checkGameOver()){
+        reinforcementPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
+        removeInactivePlayers(); // Reset players' states to issue orders for next turn if needed
+
+        for(Player* player: list_of_Players){
+            player->resetForNextTurn();
+        }
+    }
+
+    if(list_of_Players.size() == 1){
+        std::cout<< list_of_Players.front()->getName()<< "wins the game!"<< std::endl;
+    } else {
+        std::cout<< "Game ended with no winners."<< std::endl;
+    }
+}
+
 // ---------------------------------------
 // ----- Implementation for Command ------
 // ---------------------------------------
