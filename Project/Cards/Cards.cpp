@@ -1,6 +1,7 @@
 #include<iostream>
 #include <cstdlib>
 #include <ctime> // For random
+#include <time.h>
 #include "../Orders/Orders.h"
 #include "Cards.h"
 // #include "Player.h"
@@ -145,11 +146,23 @@ using namespace std;
 
     //Default constructor
     Deck::Deck(){
-        sizeDeck = 5;
+        sizeDeck = 15;
         
         cout << "\nCreating a default deck..." << '\n';
 
         //Default deck has 5 cards, and we have 5 different types of cards
+        deck_cards.push_back(new Card(Card::cardType::Bomb));
+        deck_cards.push_back(new Card(Card::cardType::Blockade));
+        deck_cards.push_back(new Card(Card::cardType::Reinforcement));
+        deck_cards.push_back(new Card(Card::cardType::Airlift));
+        deck_cards.push_back(new Card(Card::cardType::Diplomacy));
+
+        deck_cards.push_back(new Card(Card::cardType::Bomb));
+        deck_cards.push_back(new Card(Card::cardType::Blockade));
+        deck_cards.push_back(new Card(Card::cardType::Reinforcement));
+        deck_cards.push_back(new Card(Card::cardType::Airlift));
+        deck_cards.push_back(new Card(Card::cardType::Diplomacy));
+
         deck_cards.push_back(new Card(Card::cardType::Bomb));
         deck_cards.push_back(new Card(Card::cardType::Blockade));
         deck_cards.push_back(new Card(Card::cardType::Reinforcement));
@@ -222,6 +235,8 @@ using namespace std;
         4. return the newly drawn card
     */
     Card* Deck::draw() {
+
+        srand(time(NULL)); // Makes the random change every single run
 
         //Random int from 0 to the size of the deck
         int index = (rand() % (int) deck_cards.size() );
