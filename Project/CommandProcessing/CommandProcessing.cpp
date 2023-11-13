@@ -214,19 +214,14 @@
     }
 
 
-class FileCommandProcessorAdapter {
-private:
-    FileLineReader fileLineReader;
-    std::vector<Command*> commands;
-    GameEngine* gameEngine; // Reference to the game engine for validation
 
-public:
+
     // Constructor that takes the file path and game engine reference
-    FileCommandProcessorAdapter(const std::string& filePath, GameEngine* ge)
+    FileCommandProcessorAdapter::FileCommandProcessorAdapter(const std::string& filePath, GameEngine* ge)
         : fileLineReader(filePath), gameEngine(ge) {}
 
     // Destructor to clean up commands
-    ~FileCommandProcessorAdapter() {
+    FileCommandProcessorAdapter::~FileCommandProcessorAdapter() {
         for (Command* cmd : commands) {
             delete cmd;
         }
@@ -304,36 +299,32 @@ public:
         return false;
     }
 }
-};
+
 
 //=================== FileLineReader class =======================
-class FileLineReader {
-private:
-    std::ifstream fileStream;
 
-public:
-    FileLineReader(const std::string& filePath) {
+
+
+    FileLineReader::FileLineReader(const std::string& filePath) {
         fileStream.open(filePath);
         if (!fileStream.is_open()) {
             std::cerr << "Failed to open file: " << filePath << std::endl;
         }
     }
 
-    ~FileLineReader() {
+    FileLineReader::~FileLineReader() {
         if (fileStream.is_open()) {
             fileStream.close();
         }
     }
 
-    std::string readFileLine() {
+    std::string FileLineReader::readFileLine() {
         std::string line;
         if (std::getline(fileStream, line)) {
             return line;
         }
         return ""; // Return empty string if there is nothing to read or if we reached end of file
     }
-}; 
-
 
 
 
