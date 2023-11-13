@@ -32,7 +32,7 @@ void testLoggingObserver() {
     deployOrder->execute(); // Assuming execute is a member function of Order that changes its state
 
     // Simulate a game engine state transition
-    gameEngine->transition("start"); // Assuming transition is a method that changes the game engine's state
+    gameEngine->setransition("start"); // Assuming transition is a method that changes the game engine's state
 
     // Detach the observer before destruction or end of its scope to avoid use-after-free errors
     commandProcessor->detach(&logObserver);

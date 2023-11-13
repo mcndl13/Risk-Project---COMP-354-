@@ -75,10 +75,10 @@ bool GameEngine::processCommand(string command) {
 
     if (nextState) {
         currentState = nextState;
-        cout << "Valid Command! Execution complete\n";
+        std::cout << "Valid Command! Execution complete\n";
         return true;
     } else {
-        cout << "Invalid Command! Try again...\n";
+        std::cout << "Invalid Command! Try again...\n";
         return false;
     }
 }
