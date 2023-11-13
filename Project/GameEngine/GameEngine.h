@@ -60,7 +60,11 @@ class GameEngine {
         std::string getCurrentStateName();
 
 
-
+        void reinforcementPhase();
+        void issueOrdersPhase();
+        void executeOrdersPhase();
+        void removeInactivePlayers();
+        bool checkGameOver();
 
         void startupPhase(CommandProcessor*);
         void mainGameLoop();
