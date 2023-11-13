@@ -71,7 +71,10 @@
 //=================== CommandProcessor class =======================
 
     // Temporary functions
-    CommandProcessor::CommandProcessor(): list_of_commands(){}
+    CommandProcessor::CommandProcessor(): list_of_commands(){
+        // readCommand();
+
+    }
 
     CommandProcessor::~CommandProcessor() {
     }
