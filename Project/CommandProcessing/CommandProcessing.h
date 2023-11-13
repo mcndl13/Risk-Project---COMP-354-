@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "../Player/Player.h"
-
+#include <fstream>
 using namespace std;
 
 class GameEngine;
@@ -73,28 +73,33 @@ class Command{
         void saveEffect(Command *command, string toAdd);
 };
 
-// class FileCommandProcessorAdapter{
+class FileCommandProcessorAdapter{
+
+private:
+    FileLineReader fileLineReader;
+    std::vector<Command*> commands;
+    GameEngine* gameEngine; // Reference to the game engine for validation
+
+public:
+    FileCommandProcessorAdapter(const std::string& filePath, GameEngine* ge);
+    ~FileCommandProcessorAdapter();
+
+    void saveCommand();
+    Command* getCommand();
+    bool validate(Command* command);
 
 
-//     private:
-//         FileLineReader flr;
+};
+class FileLineReader{
 
-//     public:
-//     // Methods    
-//         void saveCommand();
-        
-//         Command* getCommand();
+public:
+private:
+    ifstream fileStream;
 
-//         bool validate();
-// };
+public:
+    FileLineReader(const std::string& filePath);
+    ~FileLineReader();
 
+    std::string readFileLine();
 
-
-// class FileLineReader{
-
-
-//     public:
-//         string readFileFromLine();
-
-
-// };
+};

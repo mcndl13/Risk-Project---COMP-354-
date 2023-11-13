@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include "CommandProcessing.h"
 #include "../GameEngine/GameEngine.h"
 
