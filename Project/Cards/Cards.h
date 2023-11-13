@@ -94,11 +94,6 @@ class Hand{
 
         bool IsHandFull();
 
-        
-
-
-
-
         // Assignment operator
         Hand& operator=(const Hand& deck);
 
@@ -111,38 +106,4 @@ class Hand{
         vector<Card*> cards_in_hand;
         int sizeHand;
 };
-
-
-
-
-// // These should be removed and instead link other files
-
-
-// class Player {
-
-//     public:
-
-//         Player();
-//         void issueOrder(class Orders*);
-//         vector<class Orders*> getOrders();
-//         ~Player();
-
-//     private:
-//         string name;
-//         vector<Orders*> player_orders;
-// };
-
-
-// class Orders {
-
-//     public:
-//         Orders(const string& inDescription);
-
-//         friend ostream& operator<<(ostream& os, const vector<Orders*>);
-
-//     private:
-//         string description;
-// };
-
-
 
