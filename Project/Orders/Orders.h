@@ -5,7 +5,7 @@
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
-#include "../GameEngine/GameEngine.h"
+// #include "../GameEngine/GameEngine.h"
 
 
 
@@ -31,6 +31,7 @@ class Orders {
         std::string getDescription();
 		void setDescription(std::string);
 		bool checkNegotiate(Player* playerA, std::string playerB);
+
         friend std::ostream& operator<<(std::ostream& out, const Orders& order);
 		// friend std::ostream& operator<< (std::ostream& out, const std::vector<Orders*> orders);
 };
@@ -90,13 +91,13 @@ class Advance : public Orders {
 	private:
 		Player* order_owner;
 		std::string order_name = "Advance";
-		Territory* order_target;
+		Territory* order_target;		
 		Territory* order_source;
 		int army_num;
 
 	public:
 		Advance(Player* player, const std::string& inDescription, int num, Territory* source, Territory* target);
-
+		
 		bool validate() override;
 		void execute() override;
 		std::string getName() override;
@@ -104,6 +105,8 @@ class Advance : public Orders {
 		friend std::ostream& operator << (std::ostream& out, Advance&); // Stream insertion operator
 		Advance& operator = (const Advance& advance); //Assignment operator
 };
+
+
 
 class Airlift : public Orders {
 
@@ -124,6 +127,7 @@ public:
 	friend std::ostream& operator << (std::ostream& out, Airlift&); //Assignment operator
 	Airlift& operator = (const Airlift& airlift); //Assignment operator
 };
+
 
 
 
@@ -169,9 +173,6 @@ class Blockade : public Orders {
 
 
 
-
-
-
 class Negotiate : public Orders {
 
 	private:
@@ -180,7 +181,8 @@ class Negotiate : public Orders {
 		Player* target_player;
 
 	public:
-		Negotiate(Player* order_owner, const std::string& inDescription,  Player* p_target);
+		Negotiate(Player* order_owner, const std::string& inDescription, Player* p_target);
+		
 
 		bool validate() override;
 		void execute() override;
