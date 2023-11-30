@@ -223,6 +223,7 @@ const vector<Territory*> Map::getTerritory() const {  // Implementation of getCo
 
     void Territory::addAdjacency(Territory *territory) {
         adjacencies.push_back(territory);
+        territory->adjacencies.push_back(this);
     }
 
     const vector<Territory*>& Territory::getAdjacencies() const {

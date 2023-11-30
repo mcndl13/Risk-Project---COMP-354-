@@ -2,8 +2,6 @@
 #include "Orders.h"
 #include <random>
 
-using namespace std;
-
 
 //=================== Orders class =======================
 
@@ -36,7 +34,7 @@ using namespace std;
 
     string Orders::getName() {return {};}
 
-    void Orders::setDescription(string desc){
+    void Orders::setDescription(std::string desc){
         description = desc;
     }
     bool Orders::checkNegotiate(Player* playerA, std::string playerB) {
@@ -71,6 +69,7 @@ using namespace std;
     // 1. the target territory is owned by the player
     // 2. the player has number of armies > 0
     bool Deploy::validate() {
+        std::cout<<"\nValidating Deploy order..."<<std::endl;
 
         if (order_target == nullptr||order_owner==nullptr) {
             cout << "Deploy order is invalid due to a NULLPTR problem"<<endl;
@@ -90,7 +89,7 @@ using namespace std;
     // Execute the the Deploy order and print message
     void Deploy::execute(){
 
-    cout << "Executing execute()\n\n";
+    std::cout << "\nExecuting execute() in Deploy\n\n";
 
         if (!order_owner) {
             cerr << "Error: order_owner is null\n";
@@ -107,14 +106,14 @@ using namespace std;
         if (validate()) {
             cout << "Executing Deploy order on " + order_target->getName();
             order_target->adding_armies_number(new_armies);
-            setDescription(order_owner->getName() + " has executed the order to Deploy " + to_string(order_target->get_number_of_armies())
-                        + " on the territory " + order_target->getName() + "\n\n");
+            setDescription("\n"+order_owner->getName() + " has executed the order to Deploy " + std::to_string(new_armies)
+                        + " on the territory " + order_target->getName() + ", and now there are "+std::to_string(order_target->get_number_of_armies())+" army units.\n\n");
             setExecuted(true);
         } else {
             setDescription("The Deploy order failed to execute\n");
         }
 
-        cout << getExecuted();
+        std::cout << getDescription()<<std::endl;
     }
 
     
@@ -135,9 +134,8 @@ using namespace std;
 
 
 //=================== Advance class =======================
-    Advance::Advance(Player* order_owner, const string& inDescription, int num, Territory* source, Territory* target): Orders(inDescription){
-        order_owner = order_owner;
-        order_target = target;
+    Advance::Advance(Player* in_order_owner, const string& inDescription, int num, Territory* source, Territory* target): Orders(inDescription){
+        order_owner = in_order_owner;
         army_num = num;
         order_source = source;
         order_target = target;
@@ -147,19 +145,39 @@ using namespace std;
 
 
     bool Advance::isAdjacentWith() {
+        std::cout<<"\nChecking is adjacent"<<std::endl;
+
         //look for the pointer in the vector
-        auto it = find(order_source->getAdjacencies().begin(), order_source->getAdjacencies().end(), order_target);
+        auto it = std::find(order_source->getAdjacencies().begin(), order_source->getAdjacencies().end(), order_target);
+        Territory* foundValue = *it;
+        // if(foundValue){
+        //     std::cout<<"\nThis is our target ->"<<order_target->getName()<<", and this is the territory in iterator ->"<<foundValue->getName()<<std::endl;
+        // }else{
+        //     std::cout<<"foundValue is nullptr"<<std::endl;
+        // }
+
         //if the iterater returned is not the end(), found the target
         if (it != order_source->getAdjacencies().end()) {
             return true;
         }
         //didn't find it, return false
+        std::cout<<order_source->getName()<<" is not adjacent with "<<order_target->getName()<<std::endl;
         return false;
     }
 
     bool Advance::validate() {
+        std::cout<<"\nValidating Advance order..."<<std::endl;
             if (order_source == nullptr || order_target == nullptr ||
                 order_owner == nullptr) {
+                    if(order_source == nullptr){
+                            cerr << "ERROR: Advance order has order_source as NULLPTR" << endl;
+                    }
+                    if(order_target == nullptr){
+                            cerr << "ERROR: Advance order has order_target as NULLPTR" << endl;
+                    }
+                    if(order_owner == nullptr){
+                            cerr << "ERROR: Advance order has order_owner as NULLPTR" << endl;
+                    }
                 cerr << "ERROR: Advance order validatation failed because NULLPTR" << endl;
                 return false;
             }
@@ -173,8 +191,10 @@ using namespace std;
     }
 
     void Advance::execute() {
+        std::cout<<"\nExecuting excute() in Advance..."<<std::endl;
         if (!validate()) {
             setDescription("The advance order failed to execute due to invalid\n");
+            std::cout << getDescription()<<std::endl;
             return;
         }
         //if owns target, them move units to it
@@ -187,54 +207,76 @@ using namespace std;
             }
 
             order_source->adding_armies_number(-army_num);
-            cout << army_num << " army units being removed from source territory" << endl;
             order_target->adding_armies_number(army_num);
-            cout << army_num << " army units being added to target territory" << endl;
+            setDescription(getDescription()+std::to_string(army_num)+" army units being removed from source territory "+order_source->getName()+
+            ".\n"+std::to_string(army_num)+" army units being added to target territory."+order_target->getName()+"\n");
+            std::cout << getDescription()<<std::endl;
             return;
         }
         //attack simulation
         //if there is a negotiate,abort
         if (checkNegotiate(order_owner, order_target->get_owning_player()->getName())) {
             setDescription("The advance order is in valid and was abort because of diplomacy.\n");
+            std::cout << getDescription()<<std::endl;
             return;
         }
-
-        setDescription("The advance order executed as an attack\n");
+        std::cout<<"\nThe advance order executed as an attack, attacker army units: "<<army_num<<" Defender army units: "<< order_target->get_number_of_armies()
+        <<"(number in attacker may change because source territory may not have enough army units)"<<std::endl;
         if (order_source->get_number_of_armies() < army_num) 
             army_num = order_source->get_number_of_armies();
         order_source->adding_armies_number(-army_num);
         int attackKill = 0;
         int defendKill = 0;
         for (int i = 0; i < army_num; i++) {
-            if (SimulateResult(0.6)) {//attack killing probability is 60%
+            //std::cout<<"\n doing the looop"<<std::endl;
+            if (SimulateResult(1.0)) {//attack killing probability is 60% TODO:change it bakc to 0.6 when random works
                 attackKill++;
+                //std::cout<<"\n in the if in the looop and attackKill is "<<std::to_string(attackKill) <<std::endl;
             }
         }
         for (int j = 0; j < order_target->get_number_of_armies();j++) {
-            if (SimulateResult(0.7)) {//defend killing probability is 70%
+            //std::cout<<"\n doing the looop"<<std::endl;
+            if (SimulateResult(1.0)) {//defend killing probability is 70% TODO:change it bakc to 0.6
                 defendKill++;
+                //std::cout<<"\n in the if in the looop and attackKill is "<<std::to_string(defendKill) <<std::endl;
             }
         }
         //army number decrease the amount that got killed, and wont be negative
         army_num = (army_num - defendKill<0) ? 0 : army_num - defendKill;
         //if all killed ,then minus the whole amount, otherwise minus the amount that was killed
         order_target->adding_armies_number((order_target->get_number_of_armies()-attackKill<0)?-order_target->get_number_of_armies():-attackKill);
+        std::cout<<"\nAfter calculation -> attackKill: "<<std::to_string(attackKill)<<" defendKill: "<<std::to_string(defendKill)
+        <<" And army left: "<< std::to_string(army_num)<<" , order_target army: "<<std::to_string(order_target->get_number_of_armies()) <<std::endl;
         //If all the defender's army units are eliminated, the attacker captures the territory. The attacking army
         //units that survived the battle then occupy the conquered territory
         //In this case, if both are eliminated, nothing happens
         if (order_target->get_number_of_armies() == 0&&army_num>0) {
-            order_target->set_owning_player(order_owner);
+            order_owner->add_new_player_territory(order_target);
             order_owner->setConquer(true);
             //receive a card after capture,should be end of the turn
             //order_owner->getHand()->addCardToHand();
+            setDescription("\nAfter a victorious battle, "+std::to_string(army_num)+" army units take over the territory"+order_target->getName()+"."+
+            "\nNow "+order_target->getName()+" belongs to "+order_owner->getName()+".\n");
+            order_target->adding_armies_number(army_num);
+            std::cout << getDescription()<<std::endl;
             return;
         }
         //if defender's army were not eliminated then nothing happens after
         //but if there are still attacker's army left
         //send them back
-        if(army_num>0)
-        order_source->adding_armies_number(army_num);
-
+        if(army_num>0&&order_target->get_number_of_armies() > 0){
+            order_source->adding_armies_number(army_num);
+            setDescription("\nAfter a hard fight, "+std::to_string(army_num)+" army units retreated, and the defenders has "+std::to_string(order_target->get_number_of_armies())+" army units left.");
+            std::cout << getDescription()<<std::endl;
+            return;
+        }
+        if(army_num==0&&order_target->get_number_of_armies() > 0){
+            setDescription("\nAfter a hard fight, the defenders eliminated all the attackers with "+std::to_string(order_target->get_number_of_armies())+" army units left.");
+        }
+        if(order_target->get_number_of_armies() == 0&&army_num==0){
+            setDescription("\nNo one survived, all the armies died and nothing happend after.");
+        }
+        std::cout << getDescription()<<std::endl;
     }
     /// <summary>
     /// return true if the random number is smaller than
@@ -244,10 +286,11 @@ using namespace std;
     /// <returns></returns>
 
     bool SimulateResult(double probability) {
-        random_device rd;
-        mt19937 gen(rd());
-        uniform_real_distribution<> dis(0.0, 1.0);
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> dis(0.0, 1.0);
         double randomValue = dis(gen);
+        std::cout<<"\nrandom value is :"<<randomValue<<std::endl;
         return randomValue < probability;
     }
 
@@ -273,33 +316,38 @@ using namespace std;
         order_target = target;
     }
     bool Airlift::validate() { 
+        std::cout<<"\nValidating Airlift order..."<<std::endl;
         if (order_target == nullptr ||
             order_owner == nullptr) {
-            cerr << "ERROR: Airlift order validatation failed because NULLPTR" << endl;
+            cerr << "ERROR: Airlift order validatation failed because NULLPTR" << std::endl;
             return false;
         }
         if (order_owner->ownsTerritory(order_target)&&order_owner->ownsTerritory(order_target)) {
             cout << "The airlift order is valid" << endl;
             return true;
         }
-        cout << "The advance order is invalid" << endl;
+        cout << "The airlift order is invalid" << endl;
         return false;
     }
 
     void Airlift::execute() {
+        std::cout<<"\nExecuting execute() in Airlift..."<<std::endl;
         if (validate()) {
-            setDescription("The airlift order executed\n");
-            if (army_num < order_source->get_number_of_armies()) {
+            setDescription("The airlift order executed\n"+std::to_string(army_num)+" army units were removed from source territory "+order_source->getName()+".\n"+
+            std::to_string(army_num)+"army units were airlifted to the target territory"+order_target->getName()+".\n");
+            if (army_num > order_source->get_number_of_armies()) {
                 army_num = order_source->get_number_of_armies();
             }
             order_source->adding_armies_number(-army_num);
-            cout << army_num << " army units were removed from source territory." << endl;
+            cout << army_num << " army units were removed from source territory."<<order_source->getName() <<std::endl;
             order_target->adding_armies_number(army_num);
-            cout << army_num << " army units were airlifted to the target territory." << endl;
+            cout << army_num << " army units were airlifted to the target territory." << order_target->getName()<< std::endl;
+            std::cout << getDescription()<<std::endl;
             return;
         }
         //if not valid
         setDescription("Airlift order did not execute because the order is invalid.\n");
+        std::cout << getDescription()<<std::endl;
     }
     string Airlift::getName() { return order_name; }
 
@@ -331,10 +379,12 @@ using namespace std;
             }
         }
         //no adjacent territory
+        std::cout<<order_owner->getName()<<"'s territories are not adjacent with "<<order_target->getName()<<std::endl;
         return false;
     }
 
     bool Bomb::validate() {
+        std::cout<<"\nValidating Bomb order..."<<std::endl;
         if ( order_target == nullptr ||
             order_owner == nullptr) {
             cerr << "ERROR: Bomb order validatation failed because NULLPTR" << endl;
@@ -352,6 +402,7 @@ using namespace std;
     }
 
     void Bomb::execute(){
+        std::cout<<"\nExecuting execute() in Bomb..."<<std::endl;
         if (!validate()) {
             setDescription("The bomb order failed to execute due to invalid\n");
             return;
@@ -359,8 +410,8 @@ using namespace std;
         //remove half of the army units from target
         cout << "Half of target territory's army has been removed."<<order_target<<endl;
         order_target->adding_armies_number(-order_target->get_number_of_armies() / 2);
-        setDescription("The bomb order has been executed\n");
-
+        setDescription("The bomb order has been executed, Half of target territory's("+order_target->getName()+") army has been removed. Now it has "+std::to_string(order_target->get_number_of_armies()) +" units of army. \n");
+        std::cout << getDescription()<<std::endl;
     }
 
     string Bomb::getName() {return order_name;}
@@ -380,6 +431,7 @@ using namespace std;
     }
 
     bool Blockade::validate() {
+        std::cout<<"\nValidating Blockade order..."<<std::endl;
         if (order_target == nullptr ||
             order_owner == nullptr) {
             cerr << "ERROR: Blockade order validatation failed because NULLPTR" << endl;
@@ -393,9 +445,10 @@ using namespace std;
         return false;
     }
     void Blockade::execute(){
+        std::cout<<"\nExecuting execute() in Blockade"<<std::endl;
         if (validate()) {
-            setDescription("Blockade order has been executed.\n");
             order_target->adding_armies_number(order_target->get_number_of_armies());
+            setDescription("Blockade order has been executed, and "+order_target->getName()+" is now neutral and the army on it was doubled. Now it has "+std::to_string(order_target->get_number_of_armies())+" units of army\n");
             // for(auto it : engine->GetPlayerList()){
         //  
         //  if(it->GetName()=="Neutral"){
@@ -446,23 +499,26 @@ using namespace std;
         target_player = p_target;
     }
     bool Negotiate::validate() {
+        std::cout<<"\nValidating Negotiate order..."<<std::endl;
         if (target_player == nullptr ||
             order_owner == nullptr) {
-            cerr << "ERROR: Negotiate order validatation failed because NULLPTR" << endl;
+            cerr << "ERROR: Negotiate order validatation failed because NULLPTR" << std::endl;
             return false;
         }
         if (order_owner!=target_player&&target_player->getName()!="Neutral") {
-            cout << "Negotiate order is valid." << endl;
+            cout << "Negotiate order is valid." << std::endl;
             return true;
         }
-        cout << "Negotiate order is invalid." << endl;
+        cout << "Negotiate order is invalid." << std::endl;
         return false;
     }
     void Negotiate::execute(){
+        std::cout<<"\nExecuting execute() in Negotiate..."<<std::endl;
         if (validate()) {
-            setDescription("Negotiate order has been executed.");
+            setDescription("Negotiate order has been executed."+order_owner->getName()+" and "+target_player->getName()+" can not attack each other until next turn.");
             target_player->addDiplomacy(order_owner->getName());
             order_owner->addDiplomacy(target_player->getName());
+            std::cout<<getDescription()<<std::endl;
             return;
         }
         setDescription("Negotiate order failed to execute because of invalidation.");

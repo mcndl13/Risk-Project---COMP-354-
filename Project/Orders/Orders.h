@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <deque>
+#include <algorithm>
+#include <vector>
 
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
