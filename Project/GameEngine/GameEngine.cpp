@@ -182,6 +182,17 @@ void GameEngine::mainGameLoop(){
     }
 }
 
+
+// This is part 2 of assignment #3
+void GameEngine::executeTournament(const std::vector<std::string>& maps, 
+                                   const std::vector<std::string>& strategies, 
+                                   int numberOfGames, int maxTurns) {
+    // Logic to execute the tournament
+    // Iterate over maps and strategies, play the specified number of games
+    // Limit each game to the specified number of turns
+    // Store and output the results at the end
+}
+
 // ---------------------------------------
 // ----- Implementation for Command ------
 // ---------------------------------------
