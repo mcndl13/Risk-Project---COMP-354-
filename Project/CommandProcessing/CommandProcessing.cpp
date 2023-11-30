@@ -78,6 +78,13 @@
 
     }
 
+//Rue part 3 part 2 implementation goes here
+    bool CommandProcessor::processTournamentCommand(const std::string& command) {
+    // Logic to validate and parse the tournament command
+    // Extract M, P, G, D parameters and validate them
+    // Return true if the command is valid, false otherwise
+}
+
     CommandProcessor::~CommandProcessor() {
     }
 
