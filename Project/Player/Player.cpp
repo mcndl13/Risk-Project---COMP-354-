@@ -160,6 +160,7 @@ vector<string> Player::getDiplomacyNames() {
 }
 void Player::addDiplomacy(string name) {
     diplomacyPlayersName.push_back(name);
+    std::cout<<"\n"<< name <<" was added to "<<name<<"'s diplomacy list\n";
 }
 void Player::resetDiplomacy() {
     diplomacyPlayersName.clear();

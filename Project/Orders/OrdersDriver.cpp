@@ -62,18 +62,22 @@ void testOrderExecution() {
     delete(orderList);
     std::cout<<"OK...let's pretending this is second turn..."<<std::endl;
     orderList = new OrdersList();
-    Advance* AdvanceOrder21 = new Advance(player1, "Advance 1->2", 3, territory2, territory4);
+    Advance* AdvanceOrder21 = new Advance(player1, "Advance 1->2", 3, territory2, territory3);
     Advance* AdvanceOrder22 = new Advance(player2, "Advance 2->1", 4, territory3, territory2);
+    Advance* AdvanceOrder23 = new Advance(player1, "Advance 1->1", 5, territory1, territory2);
+    Advance* AdvanceOrder24 = new Advance(player1, "Advance 1->Neutral(blockade)", 5, territory2, territory4);
     orderList->addOrders(AdvanceOrder21, player1);
     orderList->addOrders(AdvanceOrder22, player2);
+    orderList->addOrders(AdvanceOrder23, player1);
+    orderList->addOrders(AdvanceOrder24, player1);
     for (auto it : orderList->getOrdersList()) {
         it->execute();
     }
-    player1->resetDiplomacy();
-    player2->resetDiplomacy();
-    for (auto it : orderList->getOrdersList()) {
-        it->execute();
-    }
+    // player1->resetDiplomacy();
+    // player2->resetDiplomacy();
+    // for (auto it : orderList->getOrdersList()) {
+    //     it->execute();
+    // }
 }
 
 int main()

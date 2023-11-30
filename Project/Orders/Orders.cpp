@@ -215,7 +215,9 @@
         }
         //attack simulation
         //if there is a negotiate,abort
-        if (checkNegotiate(order_owner, order_target->get_owning_player()->getName())) {
+        std::string playerB = order_target->get_owning_player()->getName();
+        std::cout<<"\n Player A is : "<< order_owner->getName()<<" and player B is "<<playerB<<std::endl;
+        if (checkNegotiate(order_owner,playerB )) {
             setDescription("The advance order is in valid and was abort because of diplomacy.\n");
             std::cout << getDescription()<<std::endl;
             return;
