@@ -38,7 +38,9 @@ class CommandProcessor {
         void getCommand(GameEngine* game_engine);
         void getCommand(Player* game_engine);
 
-
+        // Method to process the tournament command
+        bool processTournamentCommand(const std::string& command);
+};
 
         // Checks if the command is valid
         bool validate();
