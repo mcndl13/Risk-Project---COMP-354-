@@ -251,6 +251,14 @@ const vector<Territory*> Map::getTerritory() const {  // Implementation of getCo
     }
 
 
+ bool borders_territory(Territory* comparator){
+        return std::any_of(adjacencies.begin(), adjacencies.end(),
+            [comparator](const Territory* bordering_territory) {
+                return bordering_territory == comparator;
+            });
+    }
+
+
 
 
 
