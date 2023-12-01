@@ -71,10 +71,7 @@ class GameEngine {
         void setMap(Map* map);
 
         // Method to execute the tournament- for A3
-        void executeTournament(const std::vector<std::string>& maps, 
-                           const std::vector<std::string>& strategies, 
-                           int numberOfGames, int maxTurns);
-};
+        void executeTournament(const std::vector<std::string>& maps, const std::vector<std::string>& strategies,int numberOfGames, int maxTurns);
 
     private:
 
