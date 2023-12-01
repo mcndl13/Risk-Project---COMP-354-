@@ -42,12 +42,6 @@ class CommandProcessor {
         bool processTournamentCommand(const std::string& command);
 };
 
-        // Checks if the command is valid
-        bool validate();
-};
-
-
-
 
 class Command{
 
