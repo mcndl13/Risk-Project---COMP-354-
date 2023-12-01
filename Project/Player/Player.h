@@ -35,6 +35,8 @@ class Player {
         int getReinforcementPool();
         void setReinforcementPool(int);
 
+        vector<Territory *> getPlayerTerritories();
+
         void add_new_player_territory(Territory *territory);
         std::vector<std::string> getDiplomacyNames();
         void addDiplomacy(std::string name);

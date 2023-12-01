@@ -50,7 +50,7 @@ bool CheaterPlayerStrategy::issueOrder(Player *player, Deck* deck, Map* territor
 }
 std::vector<Territory*> CheaterPlayerStrategy::toAttack(Player *player){//push every adjacent territory that does not belong to cheater in the list
     std::vector<Territory*> listToReturn;
-    for(auto it : player->toDefend()){//get all owned territory
+    for(auto it : player->getPlayerTerritories()){//get all owned territory
         for(auto _it : it->getAdjacencies()){//for each owned territory, get its adjacent territories
             if(!(player->ownsTerritory(_it))){//if owns
                 listToReturn.push_back(_it);//push in
@@ -67,7 +67,7 @@ void CheckForBonusCard(Player *player, Deck* deck){//could put in Player.h or pl
 }
 std::vector<Territory*> CheaterPlayerStrategy::toDefend(Player *player){//put territories that are adjacent to enemy territory into list
     std::vector<Territory*> listToReturn;
-    for(auto it : player->toDefend()){
+    for(auto it : player->getPlayerTerritories()){
         for(auto _it : it->getAdjacencies()){
             if(!(player->ownsTerritory(_it))){
                 listToReturn.push_back(it);
@@ -86,7 +86,7 @@ std::vector<Territory*> BenevolentPlayerStrategy::toAttack(Player *player) {retu
 
 std::vector<Territory*> BenevolentPlayerStrategy::toDefend(Player *player){//put territories that are adjacent to enemy territory into list
     std::vector<Territory*> listToReturn;
-    for(auto it : player->toDefend()){
+    for(auto it : player->getPlayerTerritories()){
         for(auto _it : it->getAdjacencies()){
             if(!(player->ownsTerritory(_it))){
                 listToReturn.push_back(it);
@@ -151,7 +151,7 @@ Territory* BenevolentPlayerStrategy::set_weakest_territory(Player* player){
 std::vector<std::pair<Territory*, int>> BenevolentPlayerStrategy::set_List_of_weakest_territories(Player* player){
     std::vector<std::pair<Territory*, int>> stressList;
     int tempStress = 0;
-    for(auto it: player->toDefend()){//looping owned list
+    for(auto it: player->getPlayerTerritories()){//looping owned list
             for(auto _it : it->getAdjacencies()){//for each to defend, loop adjacent territories for army number
                 if(!player->ownsTerritory(_it)){//check if it is enmeny 
                     tempStress+=_it->get_number_of_armies();//if yes, add army number to stress

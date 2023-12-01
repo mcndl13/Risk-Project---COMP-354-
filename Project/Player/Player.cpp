@@ -119,7 +119,9 @@ void Player::setReinforcementPool(int r){
     cout << "\n\nReinforcement pool is now: " << r << endl;;
 }
 
-
+vector<Territory*> Player::getPlayerTerritories(){
+    return owned_territories;
+}
 
 
 // Adding new territory to the list of territory owned by a player
