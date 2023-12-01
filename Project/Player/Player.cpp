@@ -63,34 +63,8 @@ Player& Player::operator=(const Player& p) {
 
 // deque<Orders*> orders;
 // Player contains a issueOrder() method that creates an order object and adds it to the list of orders.
-void Player::issueOrder(string order_type){
-
-
-
-    if (order_type == "Deploy"){
-        // 
-        player_orders->addOrders(new Deploy(this, "deploy troops", this->toDefend().at(1), 5), this);
-    }
-
-    else if (order_type == "Advance")//TODO: hook input with this commend
-        player_orders->addOrders(new Advance(this, "Advance troops",5, this->toAttack().at(0),this->toAttack().at(1)), this);
-
-    
-    else if (order_type == "Bomb")
-        player_orders->addOrders(new Bomb(this, "Bomb incoming!!!", this->toAttack().at(0)), this);
-
-
-
-    else if (order_type == "Blockade")
-        player_orders->addOrders(new Blockade(this, "Blockade installed", this->toAttack().at(0)),this);
-
-
-     else if (order_type == "Airlift")//TODO: hook input with this commend
-        player_orders->addOrders(new Airlift(this, "Airlift issued",5, this->toAttack().at(0),this->toAttack().at(1)), this);
-
-    
-    else
-        cout << "Invalid order\n\n"; 
+void Player::issueOrder(Orders* order, Player* owner){
+    player_orders->addOrders(order, owner);
 }
 
 // Change to owning player

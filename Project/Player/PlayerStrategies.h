@@ -4,6 +4,7 @@
 #include <string>
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
+#include "Player.h"
 
 class Orders;
 class OrdersList;
@@ -38,7 +39,7 @@ class PlayerStrategy{
 
 
 
-    private:
+    protected:
         string strategy_type;
 };
 
@@ -124,10 +125,11 @@ class BenevolentPlayerStrategy : public PlayerStrategy {
 
 
         //Helpers 
-        Territory* get_weakest_territory();
-        void set_weakest_territory(Player* player);
-
-
+        //Territory* get_weakest_territory();
+        Territory* set_weakest_territory(Player* player);
+        std::vector<std::pair<Territory*, int>> set_List_of_weakest_territories(Player* player);
+        void negotiate(Player *player,Deck *deck);
+        void airlift(Player *player,Deck *deck);
         // Stream insertion operator
         friend std::ostream& operator<<(std::ostream& out, const BenevolentPlayerStrategy& strategy);
 
@@ -136,9 +138,9 @@ class BenevolentPlayerStrategy : public PlayerStrategy {
 
     private:
         Territory* weakest_territory;
-        vector<Territory*> List__of_weakest_territories;
+        //vector<Territory*> List_of_weakest_territories;
         bool canAdvance;
-
+        std::vector<std::pair<Territory*, int>> stress_list;
 };
 
 

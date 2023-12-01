@@ -84,14 +84,14 @@ using namespace std;
 
                 cout << "\n\n3\n\n" << "index" << to_string(index);
 
-        // Get the card type to play and create a new order
-        Orders* new_order = new Deploy(player, hand->getCardInHand(index)->getCardType(), nullptr, 5);
+        // // Get the card type to play and create a new order
+        // Orders* new_order = new Deploy(player, hand->getCardInHand(index)->getCardType(), nullptr, 5);
 
-                cout << "\n\n4\n\n" << "index" << to_string(index);
+        //         cout << "\n\n4\n\n" << "index" << to_string(index);
 
-        player->issueOrder(new_order->getDescription());
+        // player->issueOrder(new_order,player );
 
-                cout << "\n\n5\n\n" << "index" << to_string(index);
+        //         cout << "\n\n5\n\n" << "index" << to_string(index);
 
         // Remove card from hand (cards_in_hand vector)
         hand->removeCardFromHand(index);

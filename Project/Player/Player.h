@@ -4,6 +4,7 @@
 #include <string>
 #include "../Map/Map.h"
 
+
 class Hand;
 class Orders;
 class OrdersList;
@@ -24,7 +25,7 @@ class Player {
         std::vector<Territory*> toDefend(); // return owned territories
         std::vector<Territory*> toAttack(); // return Neutral and enemy territories
 
-        void issueOrder(std::string);
+        void issueOrder(Orders* order, Player* owner);
 
         bool ownsTerritory(Territory *territory);
 
