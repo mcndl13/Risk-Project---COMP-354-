@@ -69,7 +69,7 @@ void Player::issueOrder(string order_type){
 
     if (order_type == "Deploy"){
         // 
-        player_orders->addOrders(new Deploy(this, "deploy troops", this->toDefend().at(1), 5), this);
+        player_orders->addOrders(new Deploy(this, "deploy troops", this->getPlayerTerritories().at(1), 5), this);
     }
 
     else if (order_type == "Advance")//TODO: hook input with this commend
@@ -115,7 +115,8 @@ ostream& operator<<(ostream &out, const Player &p){
 
 
 // Getter
-vector<Territory*> Player::toDefend(){
+
+vector<Territory*> Player::getPlayerTerritories(){
     return owned_territories;
 }
 
@@ -140,6 +141,14 @@ int Player::getReinforcementPool(){
     return reinforcementPool;
 }
 
+bool Player::hasReinforcements(){
+    return reinforcementPool > 0;
+}
+
+bool Player::hasCards(){
+    return this->getHand()->getPlayerHand().empty();
+}
+
 void Player::setReinforcementPool(int r){
     reinforcementPool = r;
     cout << "\n\nReinforcement pool is now: " << r << endl;;
@@ -153,6 +162,10 @@ void Player::add_new_player_territory(Territory* territory) {
     cout << territory->getName() << " was added to " << this->getName() << " list of territories\n\n";
 	owned_territories.push_back(territory);
     territory->set_owning_player(this);
+}
+
+void Player::addOrder(Orders* o){
+    this->getOrders().push_back(o);
 }
 
 vector<string> Player::getDiplomacyNames() {
