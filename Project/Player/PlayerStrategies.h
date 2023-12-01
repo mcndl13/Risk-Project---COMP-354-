@@ -11,21 +11,17 @@ class Player;
 
 
 
+
+
 // Abstract class
 class PlayerStrategy{
 
     public:
 
         PlayerStrategy(); // Default constructor
-        PlayerStrategy(const PlayerStrategy& strategy); // Copy constructor
-
         virtual ~PlayerStrategy();
+        PlayerStrategy(const PlayerStrategy& strategy); // Copy constructor
         
-        // Stream insertion operator
-        friend std::ostream& operator<<(std::ostream& out, const PlayerStrategy& strategy);
-
-        // Assignment Operator
-        PlayerStrategy& operator =(const PlayerStrategy& strategy);
 
         virtual bool issueOrder(Player *player, Deck* deck, Map* territoriesMap, const std::vector<Player*> gamePlayers) = 0;
         virtual std::vector<Territory*> toAttack(Player *player) = 0; // Priority of territories to attack
@@ -33,13 +29,23 @@ class PlayerStrategy{
 
 
         // Helpers
-        void setStrategyName(string name);
-        string getStrategyName() const;
+        void setStrategyType(string name);
+        void setCallingPlayer(Player*);
+        string getStrategyType() const;
+        Player* getCallingPlayer() const;
+
+
+        // Stream insertion operator
+        friend std::ostream& operator<<(std::ostream& out, const PlayerStrategy& strategy);
+
+        // Assignment Operator
+        PlayerStrategy& operator =(const PlayerStrategy& strategy);
 
 
 
     private:
-        string strategy_type;
+        string strategyName;
+        Player* callingPlayer;
 };
 
 
@@ -49,6 +55,7 @@ class HumanPlayerStrategy : public PlayerStrategy {
 
     public:
         HumanPlayerStrategy();
+        HumanPlayerStrategy(Player* p);
         ~HumanPlayerStrategy();
         HumanPlayerStrategy(const HumanPlayerStrategy&);
 
