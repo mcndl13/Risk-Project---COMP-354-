@@ -125,6 +125,7 @@ void BenevolentPlayerStrategy::airlift(Player *player, Deck *deck){
                 Territory* targetTerr = weakest_territory;
                 Orders* airlift = new Airlift(player, "Airlift from benevolent",army_To_lift,sourceTerr,targetTerr);
                 player->issueOrder(airlift,player);
+                
             }
         }
     }

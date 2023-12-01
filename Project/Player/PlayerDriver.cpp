@@ -43,10 +43,10 @@ void testPlayers(){
 
     
     cout << "Calling issueOrder:\n\n";
-    player1->issueOrder(order1->getDescription());
-    player1->issueOrder(order3->getDescription());
-    player2->issueOrder(order2->getDescription());
-    player2->issueOrder(order4->getDescription());
+    player1->issueOrder(order1,player1);
+    player1->issueOrder(order3,player1);
+    player2->issueOrder(order2,player2);
+    player2->issueOrder(order4,player2);
 
     cout << endl << player1->getName() <<"'s orders:" << endl;
 	for (Orders* o : player1->getOrders()) {
