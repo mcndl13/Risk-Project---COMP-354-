@@ -26,6 +26,8 @@ class Player {
         std::vector<Territory*> toAttack(); // return Neutral and enemy territories
         void issueOrder(std::string);
 
+        void issueOrder(Orders *order, Player *owner);
+
         bool ownsTerritory(Territory *territory);
 
         std::deque<Orders*>& getOrders();

@@ -20,7 +20,7 @@ void testPlayers(){
     Territory *territory4 = new Territory("T4");
 
     Deploy *order1 = new Deploy(player1, "Deploy", territory1, 5);
-    Advance *order2 = new Advance(player2, "Advance", territory2);
+    Advance *order2 = new Advance(player2, "Advance", 1, territory2,territory1);
     Bomb *order3 = new Bomb(player1, "Bomb", territory3);
     Blockade *order4 = new Blockade(player2, "Blockade", territory4);
 
