@@ -1,5 +1,6 @@
 #include <iostream>
 #include "PlayerStrategies.h"
+#include <random>
 using namespace std;
 
 
@@ -100,8 +101,47 @@ std::vector<Territory*> BenevolentPlayerStrategy::toDefend(Player *player){//put
 bool BenevolentPlayerStrategy::issueOrder(Player *player, Deck* deck, Map* territoriesMap, const std::vector<Player*> gamePlayers) {
     CheckForBonusCard(player,deck);//probably will not give card here
     weakest_territory = set_weakest_territory(player);
+    //random number
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<int> dis(1, player->getReinforcementPool());
+    int randomValue = dis(gen);
+    //end of random number
+    Orders* deploy = new Deploy(player, "deploy from Benevolent player", weakest_territory, randomValue);//deploy a random number of army units to the weakest
+    player->issueOrder(deploy,player);
+    //advance from strong to weak
     stress_list = set_List_of_weakest_territories(player);
-
+    airlift(player, deck);//check if it is possible to play airlift
+    for(auto it:  stress_list){
+        Territory* currTerr = it.first;
+        Territory* tarTerr;
+        int maxStress =it.second;
+        for(auto _it : currTerr->getAdjacencies()){
+            if(player->ownsTerritory(_it)){
+                auto __it = std::find_if(stress_list.begin(), stress_list.end(),
+                           [&_it](const auto& pair) {
+                               return pair.first == _it;
+                           });//to find Territory* in a vector<std::pair<Territory*,int>>
+                if (__it != stress_list.end()) {//if found
+                    //std::cout << "Territory found in the  " << __it->first->getName() << std::endl;
+                    if(maxStress<__it->second){//if the stress is bigger there, target will be it
+                        maxStress = __it->second;
+                        tarTerr = __it->first;
+                    }
+                } else {
+                    std::cerr << "Territory not found in the weak list, this is in a loop inside issureOrder in PlayerStrategies." << std::endl;
+                }
+            }
+        }
+        //advance army and next loop
+        if(maxStress!=it.second){//if self is the most stressed, do nothing.
+            Orders* advance = new Advance(player, "advance from Benevolent Player", currTerr->get_number_of_armies(),currTerr,tarTerr);
+            player->issueOrder(advance,player);
+        }
+        
+    }
+    stress_list = set_List_of_weakest_territories(player);//recheck the stress
+    negotiate(player, deck);//check if negotiate is available
 }
 
 
@@ -111,9 +151,31 @@ bool BenevolentPlayerStrategy::issueOrder(Player *player, Deck* deck, Map* terri
 //     return weakest_territory;
 // }
 void BenevolentPlayerStrategy::negotiate(Player *player, Deck *deck){
-    //TODO
+    std::cout<<"\nBenevolent player is checking his hand for a negotiate card.\n";
+    vector<Card*> handOfCard = player->getHand()->getPlayerHand();//get the hand of cards
+    for(int i =0; i<handOfCard.size()-1;i++){//loop through cards
+        if(handOfCard[i]->getCardType() == "Diplomacy"){//check if we have airlift card
+            if(stress_list.size()>0){//if yes, check if we have more than one
+                handOfCard[i]->play(player->getHand(),i,deck,player);//if yes, play the card
+                //play the airlift card, isuure a airlift order, below are the parameter that the order will need
+                pair<Player*, int> playerWithPower = std::make_pair(nullptr, 0);//fisrt is player and second is power
+                for (auto it : weakest_territory->getAdjacencies())//check the weakest's adjacencies
+                {
+                    if(playerWithPower.second<it->get_number_of_armies()){//to get the biggest army number territory and 
+                        playerWithPower = std::make_pair(it->get_owning_player(), it->get_number_of_armies());
+                    }
+                }
+                std::cout<<"\nBenevolent player is playering a negotiate card.\n";
+                Orders* negotiateOrder = new Negotiate(player, "Negotiate from benevolent", playerWithPower.first);
+                player->issueOrder(negotiateOrder,player);//still need to be excuted in main function with a loop
+                return;
+            }
+        }
+    }
+    std::cout<<"\nBenevolent player has fiald to find the negotiate card.\n";
 }
 void BenevolentPlayerStrategy::airlift(Player *player, Deck *deck){
+    std::cout<<"\nBenevolent player is checking his hand for an airlift card.\n";
     vector<Card*> handOfCard = player->getHand()->getPlayerHand();//get the hand of cards
     for(int i =0; i<handOfCard.size()-1;i++){//loop through cards
         if(handOfCard[i]->getCardType() == "Airlift"){//check if we have airlift card
@@ -121,18 +183,20 @@ void BenevolentPlayerStrategy::airlift(Player *player, Deck *deck){
                 handOfCard[i]->play(player->getHand(),i,deck,player);//if yes, play the card
                 //play the airlift card, isuure a airlift order, below are the parameter that the order will need
                 Territory* sourceTerr = stress_list[0].first;
-                int army_To_lift = stress_list[0].second;
+                int army_To_lift = sourceTerr->get_number_of_armies();
                 Territory* targetTerr = weakest_territory;
+                std::cout<<"\nBenevolent player is playing an airlift card.\n";
                 Orders* airlift = new Airlift(player, "Airlift from benevolent",army_To_lift,sourceTerr,targetTerr);
-                player->issueOrder(airlift,player);
-                
+                player->issueOrder(airlift,player);//still need to be excuted in main function with a loop
+                return;
             }
         }
     }
+    std::cout<<"\nBenevolent player has fiald to find the airlift card.\n";
 }
 
 Territory* BenevolentPlayerStrategy::set_weakest_territory(Player* player){
-    pair<Territory*,int> stressOnTerr ={nullptr,0};
+    pair<Territory*,int> stressOnTerr =std::make_pair(nullptr,0);
     int tempStress = 0;
     for(auto it: BenevolentPlayerStrategy::toDefend(player)){//looping todefend list
             for(auto _it : it->getAdjacencies()){//for each to defend, loop adjacent territories for army number
@@ -141,7 +205,7 @@ Territory* BenevolentPlayerStrategy::set_weakest_territory(Player* player){
                 }
             }
             if(tempStress>stressOnTerr.second){
-                stressOnTerr = {it,tempStress};
+                stressOnTerr = std::make_pair(it,tempStress);
             }
             tempStress = 0;//reset stress for next loop
     }
@@ -158,6 +222,9 @@ std::vector<std::pair<Territory*, int>> BenevolentPlayerStrategy::set_List_of_we
                 }
             }
             tempStress-=it->get_number_of_armies();
+            if(tempStress==it->get_number_of_armies()){
+                tempStress-=10;
+            }
             stressList.push_back(std::make_pair(it,tempStress));
             tempStress = 0;//reset stress for next loop
     }
