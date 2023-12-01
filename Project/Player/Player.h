@@ -7,6 +7,7 @@
 class Hand;
 class Orders;
 class OrdersList;
+class PlayerStrategy;
 
 
 class Player {
@@ -23,7 +24,6 @@ class Player {
         
         std::vector<Territory*> toDefend(); // return owned territories
         std::vector<Territory*> toAttack(); // return Neutral and enemy territories
-
         void issueOrder(std::string);
 
         bool ownsTerritory(Territory *territory);
@@ -32,12 +32,24 @@ class Player {
         Hand* getHand();
         std::string getName();
         int getReinforcementPool();
+        std::vector<Territory*> getPlayerTerritories();
+
         void setReinforcementPool(int);
 
         void add_new_player_territory(Territory *territory);
         std::vector<std::string> getDiplomacyNames();
         void addDiplomacy(std::string name);
         void resetDiplomacy();
+        Orders* getNextOrder();
+        bool isDoneIssuingOrders();
+        bool hasCards();
+        bool hasReinforcements();
+        void AddReinforcementPool(int);
+        bool ownsAllTerritoriesInContinent(Continent*);
+        void resetForNextTurn();
+
+        void addOrder(Orders*);
+
 
         bool getConquer();
         void setConquer(bool has_conquer);
@@ -45,10 +57,12 @@ class Player {
     private:
         std::string player_Name;
         std::vector<Territory*> owned_territories; // Collection of territories owned by a player
+        std::vector<std::string> diplomacyPlayersName;
 
         bool hasConquered;
-        std::vector<std::string> diplomacyPlayersName;
         int reinforcementPool;
         Hand* player_hand;  // player hand
         OrdersList* player_orders; // List of orders
+        PlayerStrategy* player_strategy; // Determines if the player will be Human, Aggressive, Benevolent, Neutral, Cheater
+
 };
