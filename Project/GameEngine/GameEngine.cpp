@@ -91,9 +91,8 @@ string GameEngine::getCurrentStateName() {
     }
 }
 
-void GameEngine::re
-inforcementPhase(){
-    for(Player* player: list_of_players){
+void GameEngine::reinforcementPhase(){
+    for(Player* player: list_of_Players){
         int territoriesOwned = player->toDefend().size();
         int reinforcementUnits = std::max(3, territoriesOwned/3); // Minimum reinforcement rule
 
@@ -110,10 +109,10 @@ inforcementPhase(){
 }
 
 void GameEngine::issueOrdersPhase(){
-    bool allPLayersDone = false;
+    bool allPlayersDone = false;
     while(!allPlayersDone){
         allPlayersDone = true;
-        for(Player* player: list_of_players){
+        for(Player* player: list_of_Players){
             if(player->hasReinforcements()){
                 player->issueOrder("deploy"); // Player issues a deploy order
             } else{
@@ -137,7 +136,7 @@ void GameEngine::executeOrdersPhase(){
         ordersPending = false;
         for(Player* player: list_of_Players){
             if(!player->getOrders().empty()){
-                Order* order = player->getNextOrder(); // Get the next order
+                Orders* order = player->getNextOrder(); // Get the next order
                 if(order->validate()){
                     // Validate before execution
                     order->execute(); // Execute order
