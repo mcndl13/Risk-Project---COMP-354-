@@ -20,7 +20,7 @@ void testTournament() {
 
         // Output the tournament results
         // Assuming the results are stored and accessible
-        // gameEngine.outputTournamentResults();
+        gameEngine.outputTournamentResults();
     } else {
         std::cout << "Invalid tournament command." << std::endl;
     }
