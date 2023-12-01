@@ -93,6 +93,7 @@ class Territory {
         void adding_armies_number(int);
         // int get_index_index();
 
+        bool borders_territory (Territory *comparator);
         void addAdjacency(Territory *territory);
         const std::vector<Territory*>& getAdjacencies() const;
 
