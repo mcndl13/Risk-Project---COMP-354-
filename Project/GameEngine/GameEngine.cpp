@@ -181,6 +181,15 @@ void GameEngine::mainGameLoop(){
     }
 }
 
+// This is part 2 of assignment #3
+// stored results will be outputted in driver of part 2 A3 using this method
+void GameEngine::outputTournamentResults() {
+    std::cout << "Tournament Results:" << std::endl;
+    for (const auto& result : tournamentResults) {
+        std::cout << result << std::endl;
+    }
+}
+
 
 // This is part 2 of assignment #3
 void GameEngine::executeTournament(const std::vector<std::string>& maps, 
