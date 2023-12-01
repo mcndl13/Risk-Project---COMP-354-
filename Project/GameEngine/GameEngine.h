@@ -48,6 +48,8 @@ class State {
 // Class representing the game engine responsible for managing game states.
 class GameEngine {
 
+        std::vector<std::string> tournamentResults;
+
     public:
         GameEngine(State* startState); // Constructor initializes with a start state
 
@@ -59,7 +61,8 @@ class GameEngine {
         // Method to retrieve the name of the current state.
         std::string getCurrentStateName();
 
-
+        // store tournament result for A3 Part 2
+        void outputTournamentResults();
         void reinforcementPhase();
         void issueOrdersPhase();
         void executeOrdersPhase();
