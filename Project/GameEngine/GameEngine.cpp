@@ -181,6 +181,46 @@ void GameEngine::mainGameLoop(){
     }
 }
 
+/////////////////////////// ASSIGNMENT 3 PART 2 //////////////////////////////////////////////////////
+
+     // Logic to execute the tournament
+    // Iterate over maps and strategies, play the specified number of games
+    // Limit each game to the specified number of turns
+    // Store and output the results at the end
+
+// This is part 2 of assignment #3
+void GameEngine::executeTournament(const std::vector<std::string>& maps, 
+                                   const std::vector<std::string>& strategies, 
+                                   int numberOfGames, int maxTurns) {
+	std::cout << "Starting Tournament..." << std::endl;
+
+    for (const auto& map : maps) {
+        for (int game = 0; game < numberOfGames; ++game) {
+            setupGame(map, strategies); // Set up the game with the map and player strategies
+            playGame(maxTurns); // Play the game for the specified number of turns
+            // Log the result of each game
+        }
+    }
+
+    // Output the tournament results
+    outputTournamentResults();
+    
+}
+
+// NEED TO ADD IMPLEMENTATION OF PLAY GAME AND SETUPGAME METHODS BASED ON PART 1 OF A3
+
+//void GameEngine::setupGame(const std::string& map, const std::vector<std::string>& strategies) {
+    //// Load the map and set up players with the given strategies
+    //// This function should prepare the game for playing
+//}
+
+//void GameEngine::playGame(int maxTurns) {
+   //// Main game loop for the specified number of turns
+    //// This function should simulate the game until maxTurns or a winner is determined
+//}
+
+
+
 // This is part 2 of assignment #3
 // stored results will be outputted in driver of part 2 A3 using this method
 void GameEngine::outputTournamentResults() {
@@ -191,16 +231,7 @@ void GameEngine::outputTournamentResults() {
 }
 
 
-// This is part 2 of assignment #3
-void GameEngine::executeTournament(const std::vector<std::string>& maps, 
-                                   const std::vector<std::string>& strategies, 
-                                   int numberOfGames, int maxTurns) {
-    // Logic to execute the tournament
-    // Iterate over maps and strategies, play the specified number of games
-    // Limit each game to the specified number of turns
-    // Store and output the results at the end
-}
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // ---------------------------------------
 // ----- Implementation for Command ------
 // ---------------------------------------
