@@ -20,7 +20,7 @@ void testPlayers(){
     Territory *territory4 = new Territory("T4");
 
     Deploy *order1 = new Deploy(player1, "Deploy", territory1, 5);
-    Advance *order2 = new Advance(player2, "Advance", 1, territory2,territory1);
+    Advance *order2 = new Advance(player2, "Advance",3 ,territory2, territory3);
     Bomb *order3 = new Bomb(player1, "Bomb", territory3);
     Blockade *order4 = new Blockade(player2, "Blockade", territory4);
 
@@ -43,10 +43,12 @@ void testPlayers(){
 
     
     cout << "Calling issueOrder:\n\n";
-    player1->issueOrder(order1->getDescription());
-    player1->issueOrder(order3->getDescription());
-    player2->issueOrder(order2->getDescription());
-    player2->issueOrder(order4->getDescription());
+
+    // For old assignments
+    // player1->issueOrder(order1->getDescription());
+    // player1->issueOrder(order3->getDescription());
+    // player2->issueOrder(order2->getDescription());
+    // player2->issueOrder(order4->getDescription());
 
     cout << endl << player1->getName() <<"'s orders:" << endl;
 	for (Orders* o : player1->getOrders()) {
