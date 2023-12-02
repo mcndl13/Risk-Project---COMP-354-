@@ -114,14 +114,14 @@ void GameEngine::issueOrdersPhase(){
         allPlayersDone = true;
         for(Player* player: list_of_Players){
             if(player->hasReinforcements()){
-                player->issueOrder("deploy"); // Player issues a deploy order
+                player->issueOrder(this); // Player issues a deploy order
             } else{
                 // Player decides to issue advance or other orders based on their strategy
-                player->issueOrder("advance");
+                player->issueOrder(this);
                 
                 // Check if the player wants to use a card
                 if(player->hasCards()){
-                    player->issueOrder("play card");
+                    player->issueOrder(this);
                 }
             }
 
@@ -223,7 +223,6 @@ void GameEngine::executeTournament(const std::vector<std::string>& maps,
 void GameEngine::setupGame(const std::string& map, const std::vector<std::string>& strategies) {
     // Load the map for the game
     setMap(Map* map);
-    
 }
 
 // Main game loop for the tournament mode
@@ -480,3 +479,13 @@ void GameEngine::startupPhase(CommandProcessor* commandProcessor){
     } 
 
 }
+
+
+
+
+
+Deck* GameEngine::getGameDeck(){return this->game_deck;}
+Map* GameEngine::getGameMaps(){return this->game_map;}
+vector<Player*> GameEngine::getGamePlayers(){return this->list_of_Players;}
+
+
