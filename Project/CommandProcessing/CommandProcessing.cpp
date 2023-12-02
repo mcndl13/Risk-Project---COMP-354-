@@ -78,12 +78,64 @@
 
     }
 
-//Rue part 3 part 2 implementation goes here
-    bool CommandProcessor::processTournamentCommand(const std::string& command) {
+//A3 part 2 implementation goes here- PROCESS TOURNAMENT COMMAND IMPLEMENTATION
+    
     // Logic to validate and parse the tournament command
     // Extract M, P, G, D parameters and validate them
     // Return true if the command is valid, false otherwise
+    bool CommandProcessor::processTournamentCommand(const std::string& command) {
+    std::istringstream iss(command);
+    std::string token;
+    std::vector<std::string> mapFiles;
+    std::vector<std::string> playerStrategies;
+    int numberOfGames = 0, maxNumberOfTurns = 0;
+
+    // Parse the command string using a string stream
+    while (getline(iss, token, ' ')) {
+        // Check if the current token is "-M" which indicates the start of map file list
+        if (token == "-M") {
+            getline(iss, token, ' ');
+            std::istringstream maps(token);
+            std::string map;
+            // Parse the list of maps, separated by commas
+            while (getline(maps, map, ',')) {
+                mapFiles.push_back(map);
+            }
+        }
+        // Check if the current token is "-P" which indicates the start of player strategies list
+        else if (token == "-P") {
+            getline(iss, token, ' ');
+            std::istringstream players(token);
+            std::string strategy;
+            // Parse the list of player strategies, separated by commas
+            while (getline(players, strategy, ',')) {
+                playerStrategies.push_back(strategy);
+            }
+        }
+        // Check if the current token is "-G" which indicates the number of games
+        else if (token == "-G") {
+            iss >> numberOfGames;
+        }
+        // Check if the current token is "-D" which indicates the maximum number of turns
+        else if (token == "-D") {
+            iss >> maxNumberOfTurns;
+        }
+    }
+
+    // Validate the parsed parameters to ensure they meet the criteria
+    if (mapFiles.size() >= 1 && mapFiles.size() <= 5 &&
+        playerStrategies.size() >= 2 && playerStrategies.size() <= 4 &&
+        numberOfGames >= 1 && numberOfGames <= 5 &&
+        maxNumberOfTurns >= 10 && maxNumberOfTurns <= 50) {
+        // Parameters are valid, execute the tournament with the parsed parameters
+        GameEngine::getInstance()->executeTournament(mapFiles, playerStrategies, numberOfGames, maxNumberOfTurns);
+        return true;
+    }
+
+    // Parameters are invalid, return false
+    return false;
 }
+
 
     CommandProcessor::~CommandProcessor() {
     }
