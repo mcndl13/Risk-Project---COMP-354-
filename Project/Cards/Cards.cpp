@@ -89,7 +89,6 @@ using namespace std;
 
                 cout << "\n\n4\n\n" << "index" << to_string(index);
 
-        player->issueOrder(new_order->getDescription());
 
                 cout << "\n\n5\n\n" << "index" << to_string(index);
 
