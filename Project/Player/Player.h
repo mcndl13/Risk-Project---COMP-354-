@@ -9,6 +9,8 @@ class Orders;
 class OrdersList;
 class PlayerStrategy;
 
+class GameEngine;
+
 
 class Player {
 
@@ -24,9 +26,7 @@ class Player {
         
         std::vector<Territory*> toDefend(); // return owned territories
         std::vector<Territory*> toAttack(); // return Neutral and enemy territories
-        void issueOrder(std::string);
-
-        void issueOrder(Orders *order, Player *owner);
+        void issueOrder(GameEngine*);
 
         bool ownsTerritory(Territory *territory);
 
@@ -52,6 +52,9 @@ class Player {
 
         void addOrder(Orders*);
         void changeStrategy();
+        PlayerStrategy* getPlayerStartegy();
+
+        void setStrategy (PlayerStrategy*);
 
 
         bool getConquer();
