@@ -173,6 +173,9 @@ class NeutralPlayerStrategy : public PlayerStrategy {
 
         // Assignment Operator
         NeutralPlayerStrategy& operator =(const NeutralPlayerStrategy& strategy);
+
+    private:
+        int previousCardCount;
 };
 
 
