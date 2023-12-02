@@ -219,6 +219,52 @@ void GameEngine::executeTournament(const std::vector<std::string>& maps,
     //// This function should simulate the game until maxTurns or a winner is determined
 //}
 
+// Tournament mode setup for each game
+void GameEngine::setupGame(const std::string& map, const std::vector<std::string>& strategies) {
+    // Load the map for the game
+    loadMap(map);
+
+    // Clear existing players and set up new players based on the strategies provided
+    list_of_Players.clear();
+    for (const auto& strategy : strategies) {
+        createPlayer(strategy); // Create a player with the given strategy
+    }
+
+    // Additional setup like distributing territories, assigning initial armies, etc.
+    
+}
+
+// Main game loop for the tournament mode
+void GameEngine::playGame(int maxTurns) {
+    for (int turn = 0; turn < maxTurns; ++turn) {
+        // Check if the game is over (e.g., one player has won)
+        if (isGameOver()) {
+            break;
+        }
+
+        // Run game phases for each turn
+        reinforcementPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
+
+        // Remove inactive players if any
+        removeInactivePlayers();
+
+        // Reset states for the next turn
+        for (Player* player : list_of_Players) {
+            player->resetForNextTurn();
+        }
+    }
+
+    // If maxTurns is reached without a winner, declare the game a draw
+    if (!isGameOver()) {
+        declareDraw();
+    }
+
+    // Store the result of the game for tournament reporting
+    storeGameResult();
+}
+
 
 
 // This is part 2 of assignment #3
