@@ -575,6 +575,60 @@ using namespace std;
     }
 
 
+
+
+    //=================== NeutralPlayerStrategy class =======================
+    NeutralPlayerStrategy::NeutralPlayerStrategy() {setStrategyType("Neutral");}
+    NeutralPlayerStrategy::~NeutralPlayerStrategy() {}
+
+
+    vector<Territory*> NeutralPlayerStrategy::toDefend(Player *player) {return player->getPlayerTerritories();}
+
+
+    vector<Territory*> NeutralPlayerStrategy::toAttack(Player *player) {
+        vector <Territory*> territoriesToAttack = vector <Territory*>();
+
+        for(Territory* t : player->getPlayerTerritories()) {
+
+            for(Territory* adj : t->getAdjacencies()){
+                if(adj->get_owning_player() != player)
+                    territoriesToAttack.push_back(adj);
+            }
+        }
+        return territoriesToAttack;
+    }
+
+
+    bool NeutralPlayerStrategy::issueOrder(Player *player, Deck* deck, Map* territoriesMap, vector<Player*> gamePlayers) {
+
+        if (previousCardCount > player->getHand()->getSize()){
+            player->changeStrategy();
+            return false;
+        }
+
+        cout << player->getName()  << " is ending their turn.\n" << endl;
+        return false;
+    }
+
+
+    NeutralPlayerStrategy::NeutralPlayerStrategy(const NeutralPlayerStrategy &strategy){
+        this->setStrategyType(strategy.getStrategyType());
+    }
+
+
+    ostream &operator<<(ostream &out, const NeutralPlayerStrategy &strategy) {
+        return out << strategy.getStrategyType();
+    }
+
+
+    NeutralPlayerStrategy &NeutralPlayerStrategy::operator=(const NeutralPlayerStrategy &strategy) {
+        setStrategyType(strategy.getStrategyType());
+        return *this;
+    }
+
+
+
+
 //=================== CheaterPlayerStrategy class =======================
 CheaterPlayerStrategy::CheaterPlayerStrategy(){
     setStrategyType("Cheater");
