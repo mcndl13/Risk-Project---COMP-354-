@@ -137,6 +137,7 @@ class BenevolentPlayerStrategy : public PlayerStrategy {
         void negotiate(Player *player,Deck *deck);
         void airlift(Player *player,Deck *deck);
 
+
         // Stream insertion operator
         friend std::ostream& operator<<(std::ostream& out, const BenevolentPlayerStrategy& strategy);
 
@@ -189,8 +190,6 @@ class CheaterPlayerStrategy : public PlayerStrategy {
         CheaterPlayerStrategy();
         ~CheaterPlayerStrategy();
         CheaterPlayerStrategy(const CheaterPlayerStrategy&);
-
-        CheaterPlayerStrategy& operator=(const CheaterPlayerStrategy&);
 
         bool issueOrder(Player *player, Deck* deck, Map* territoriesMap, const std::vector<Player*> gamePlayers) override;
         std::vector<Territory*> toAttack(Player *player) override;
