@@ -1,10 +1,10 @@
 #include "CommandProcessing.h"
-#include "GameEngine.h"
+#include "../GameEngine/GameEngine.h"
 #include <iostream>
 
 void testTournament() {
     CommandProcessor commandProcessor;
-    GameEngine gameEngine;
+    GameEngine* gameEngin =  new GameEngine();
 
     std::string tournamentCommand = "tournament -M Map1,Map2 -P Aggressive,Benevolent -G 3 -D 20";
 
@@ -16,7 +16,7 @@ void testTournament() {
         int maxTurns = 20;
 
         // Execute the tournament
-        gameEngine.executeTournament(maps, strategies, numberOfGames, maxTurns);
+        gameEngine->executeTournament(maps, strategies, numberOfGames, maxTurns);
 
         // Output the tournament results
         // Assuming the results are stored and accessible
