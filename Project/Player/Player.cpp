@@ -1,7 +1,8 @@
 #include <iostream>
 #include "Player.h"
 #include "../Orders/Orders.h"
-#include "PlayerStrategy.h"
+#include "PlayerStrategies.h"
+#include "../GameEngine/GameEngine.h"
 using namespace std;
 
 // Default Constructor
@@ -63,34 +64,8 @@ Player& Player::operator=(const Player& p) {
 
 // deque<Orders*> orders;
 // Player contains a issueOrder() method that creates an order object and adds it to the list of orders.
-void Player::issueOrder(string order_type){
-
-
-
-    if (order_type == "Deploy"){
-        // 
-        player_orders->addOrders(new Deploy(this, "deploy troops", this->getPlayerTerritories().at(1), 5), this);
-    }
-
-    else if (order_type == "Advance")//TODO: hook input with this commend
-        player_orders->addOrders(new Advance(this, "Advance troops",5, this->toAttack().at(0),this->toAttack().at(1)), this);
-
-    
-    else if (order_type == "Bomb")
-        player_orders->addOrders(new Bomb(this, "Bomb incoming!!!", this->toAttack().at(0)), this);
-
-
-
-    else if (order_type == "Blockade")
-        player_orders->addOrders(new Blockade(this, "Blockade installed", this->toAttack().at(0)),this);
-
-
-     else if (order_type == "Airlift")//TODO: hook input with this commend
-        player_orders->addOrders(new Airlift(this, "Airlift issued",5, this->toAttack().at(0),this->toAttack().at(1)), this);
-
-    
-    else
-        cout << "Invalid order\n\n"; 
+void Player::issueOrder(GameEngine* gameEngine){
+    this->getPlayerStartegy()->issueOrder(this, gameEngine->getGameDeck(), gameEngine->getGameMaps(), gameEngine->getGamePlayers());
 }
 
 // Change to owning player
@@ -160,6 +135,14 @@ void  Player::changeStrategy(){
 
     delete this->player_strategy;
     player_strategy = temp;
+}
+
+void Player::setStrategy (PlayerStrategy* p){
+    this->player_strategy = p;
+}
+
+PlayerStrategy* Player::getPlayerStartegy(){
+    return player_strategy;
 }
 
 
