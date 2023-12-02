@@ -51,6 +51,7 @@ class Player {
         void resetForNextTurn();
 
         void addOrder(Orders*);
+        void changeStrategy();
 
 
         bool getConquer();
