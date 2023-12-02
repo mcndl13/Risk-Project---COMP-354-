@@ -43,6 +43,7 @@ class CommandProcessor {
 };
 
 
+
 class Command{
 
     private:
@@ -69,6 +70,21 @@ class Command{
         void saveEffect(Command *command, string toAdd);
 };
 
+class FileLineReader{
+
+public:
+private:
+    ifstream fileStream;
+
+public:
+    FileLineReader(const std::string& filePath);
+    ~FileLineReader();
+
+    std::string readFileLine();
+
+};
+
+
 class FileCommandProcessorAdapter{
 
 private:
@@ -84,18 +100,5 @@ public:
     Command* getCommand();
     bool validate(Command* command);
 
-
-};
-class FileLineReader{
-
-public:
-private:
-    ifstream fileStream;
-
-public:
-    FileLineReader(const std::string& filePath);
-    ~FileLineReader();
-
-    std::string readFileLine();
 
 };
