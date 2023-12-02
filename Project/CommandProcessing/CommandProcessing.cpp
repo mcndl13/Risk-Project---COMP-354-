@@ -79,7 +79,7 @@
     }
 
 //A3 part 2 implementation goes here- PROCESS TOURNAMENT COMMAND IMPLEMENTATION
-    
+
     // Logic to validate and parse the tournament command
     // Extract M, P, G, D parameters and validate them
     // Return true if the command is valid, false otherwise
@@ -384,7 +384,6 @@
         }
         return ""; // Return empty string if there is nothing to read or if we reached end of file
     }
-
 
 
 
