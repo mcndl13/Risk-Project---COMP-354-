@@ -71,6 +71,7 @@ class GameEngine {
         // Declare new methods for tournament mode- setupGame and playGame methods
         void setupGame(const std::string& map, const std::vector<std::string>& strategies);
         void playGame(int maxTurns);
+        void declareDraw();
 
 ///////////////////////////////////////////////////////////////////
         void reinforcementPhase();
