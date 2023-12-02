@@ -61,8 +61,18 @@ class GameEngine {
         // Method to retrieve the name of the current state.
         std::string getCurrentStateName();
 
+//////////////////// A3 PART 2/////////////////////////////////////
+
         // store tournament result for A3 Part 2
         void outputTournamentResults();
+        // Method to execute the tournament- for A3
+        void executeTournament(const std::vector<std::string>& maps, const std::vector<std::string>& strategies,int numberOfGames, int maxTurns);
+
+        // Declare new methods for tournament mode- setupGame and playGame methods
+        void setupGame(const std::string& map, const std::vector<std::string>& strategies);
+        void playGame(int maxTurns);
+
+///////////////////////////////////////////////////////////////////
         void reinforcementPhase();
         void issueOrdersPhase();
         void executeOrdersPhase();
@@ -73,8 +83,7 @@ class GameEngine {
         void mainGameLoop();
         void setMap(Map* map);
 
-        // Method to execute the tournament- for A3
-        void executeTournament(const std::vector<std::string>& maps, const std::vector<std::string>& strategies,int numberOfGames, int maxTurns);
+        
 
     private:
 
